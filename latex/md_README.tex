@@ -1,0 +1,46 @@
+C++ Stand-\/alone library for Merging, Digitizing, and Triggering hits of photomultiplier tubes (PMTs) based on \href{https://github.com/WCSim/WCSim}{\texttt{ WCSim}}. A Python interface is optionally provided, requiring pre-\/installation of \href{https://pybind11.readthedocs.io/en/stable/installing.html}{\texttt{ pybind11}}.
+
+The library provides C++ classes that manage three tasks\+:
+
+
+\begin{DoxyItemize}
+\item Merging true hits (simulated photoelectrons by WCSim) of an events with those of any number of events
+\begin{DoxyItemize}
+\item Intrinsic dark noise can be added during this stage
+\end{DoxyItemize}
+\item Digitizing true hits
+\begin{DoxyItemize}
+\item Timing and charge of a digitized hit is simulated by a simple model used in WCSim
+\item The library is capable of accomodating alternative models
+\item Parameters describing PMT charcteristics such as timing resolution can be varied
+\item Digitized hits by PMT afterpusing can be added
+\end{DoxyItemize}
+\item Triggering digitized hits
+\begin{DoxyItemize}
+\item A simple algorithm that counts number of digitized hits falling in a sliding time winodw
+\item Selectable trigger window and thershold
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md1}{}\doxysection{WCTE/\+WCSim usage}\label{md_README_autotoc_md1}
+Simple runtime procedures. First set up your ROOT and WCSIM\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{source your\_thisroot.sh}
+\DoxyCodeLine{export WCSIMDIR=your\_WCSIM\_installation}
+
+\end{DoxyCode}
+ If {\ttfamily lib\+WCSim\+Root.\+so} is not directly under {\ttfamily WCSIMDIR}, export to {\ttfamily WCSIMROOTDIR}. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{export WCSIMROOTDIR=your\_libWCSimRoot.so\_installation}
+
+\end{DoxyCode}
+ Then set up the MDT environment. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{source envMDT.sh}
+\DoxyCodeLine{cd \$MDTROOT/cpp; make clean; make all}
+\DoxyCodeLine{cd \$MDTROOT/app/utilities/WCRootData; make clean; make all}
+\DoxyCodeLine{cd \$MDTROOT/app/application; make clean; make appIWCDSingleEvent}
+\DoxyCodeLine{cd \$MDTROOT}
+\DoxyCodeLine{\# edit variables properly in run\_test\_mdt4wcte.sh}
+\DoxyCodeLine{bash run\_test\_mdt4iwcd.sh}
+
+\end{DoxyCode}
+ 

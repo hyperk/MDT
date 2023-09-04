@@ -1,0 +1,53 @@
+\hypertarget{classGenericPMTResponse}{}\doxysection{Generic\+PMTResponse Class Reference}
+\label{classGenericPMTResponse}\index{GenericPMTResponse@{GenericPMTResponse}}
+Inheritance diagram for Generic\+PMTResponse\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.718446cm]{classGenericPMTResponse}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a293080c99b0827599f6c11c2f40e35d0}\label{classGenericPMTResponse_a293080c99b0827599f6c11c2f40e35d0}} 
+{\bfseries Generic\+PMTResponse} (const int, const string \&s=\char`\"{}\char`\"{})
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_ada26fdb0238e5fcc92b5bd94bf2e9e8e}\label{classGenericPMTResponse_ada26fdb0238e5fcc92b5bd94bf2e9e8e}} 
+void {\bfseries Initialize} (int, const string \&s=\char`\"{}\char`\"{})
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a869e41d0c6b7dc995b4c20e4b3a9a502}\label{classGenericPMTResponse_a869e41d0c6b7dc995b4c20e4b3a9a502}} 
+virtual double {\bfseries Get\+Raw\+SPE} (const \mbox{\hyperlink{classTrueHit}{True\+Hit}} $\ast$th=NULL, const \mbox{\hyperlink{classHitTube}{Hit\+Tube}} $\ast$ht=NULL)
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a1c519e601b19af02b551c739c6ef0eb7}\label{classGenericPMTResponse_a1c519e601b19af02b551c739c6ef0eb7}} 
+virtual float {\bfseries Hit\+Time\+Smearing} (float)
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_ad65773c7b4df8bebf05b095b308ad8c3}\label{classGenericPMTResponse_ad65773c7b4df8bebf05b095b308ad8c3}} 
+virtual bool {\bfseries Apply\+DE} (const \mbox{\hyperlink{classTrueHit}{True\+Hit}} $\ast$th=NULL, const \mbox{\hyperlink{classHitTube}{Hit\+Tube}} $\ast$ht=NULL)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a278498f2ac59ffd94b1e5605e8314696}\label{classGenericPMTResponse_a278498f2ac59ffd94b1e5605e8314696}} 
+void {\bfseries Load\+CDFOf\+SPE} (const string \&s)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a16bfdc1e80e296612f2fa10b809e00bd}\label{classGenericPMTResponse_a16bfdc1e80e296612f2fa10b809e00bd}} 
+float {\bfseries fqpe0} \mbox{[}501\mbox{]}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a39ffb76c7eb6f3668dbbb30613c8a84a}\label{classGenericPMTResponse_a39ffb76c7eb6f3668dbbb30613c8a84a}} 
+string {\bfseries f\+Txt\+File\+SPECDF}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a1dbddf5f7d546e816dab8bc786a0c01d}\label{classGenericPMTResponse_a1dbddf5f7d546e816dab8bc786a0c01d}} 
+float {\bfseries f\+TRes\+Constant}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a1407f290da40521d9d54881eee728ee1}\label{classGenericPMTResponse_a1407f290da40521d9d54881eee728ee1}} 
+float {\bfseries f\+TRes\+Minimum}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/PMTResponse.\+h\item 
+cpp/src/PMTResponse.\+cc\end{DoxyCompactItemize}

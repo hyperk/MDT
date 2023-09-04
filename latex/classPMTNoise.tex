@@ -1,0 +1,62 @@
+\hypertarget{classPMTNoise}{}\doxysection{PMTNoise Class Reference}
+\label{classPMTNoise}\index{PMTNoise@{PMTNoise}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classPMTNoise_adf8d5214f4eef069f70d1463a04ce368}\label{classPMTNoise_adf8d5214f4eef069f70d1463a04ce368}} 
+{\bfseries PMTNoise} (const int, const string \&s=\char`\"{}\char`\"{})
+\item 
+\mbox{\Hypertarget{classPMTNoise_ad844680b41a1c3c5a5a10f5fe9ed75ce}\label{classPMTNoise_ad844680b41a1c3c5a5a10f5fe9ed75ce}} 
+void {\bfseries Set\+Number\+Of\+PMTs} (const int)
+\item 
+\mbox{\Hypertarget{classPMTNoise_a69e5c86dfb48c71ff59d2ec380c3ac9e}\label{classPMTNoise_a69e5c86dfb48c71ff59d2ec380c3ac9e}} 
+void {\bfseries Set\+Min\+Tube\+ID} (const int)
+\item 
+\mbox{\Hypertarget{classPMTNoise_abb41846c5aceb6921170fdc146c48bdb}\label{classPMTNoise_abb41846c5aceb6921170fdc146c48bdb}} 
+void {\bfseries Set\+Max\+Tube\+ID} (const int)
+\item 
+\mbox{\Hypertarget{classPMTNoise_a027ea52ec9c91934db434e3197ae5185}\label{classPMTNoise_a027ea52ec9c91934db434e3197ae5185}} 
+void {\bfseries Set\+Window\+Low} (const double)
+\item 
+\mbox{\Hypertarget{classPMTNoise_af23978725ebaf9113c236d8088c5fe88}\label{classPMTNoise_af23978725ebaf9113c236d8088c5fe88}} 
+void {\bfseries Set\+Window\+Up} (const double)
+\item 
+\mbox{\Hypertarget{classPMTNoise_a0ca6f387c348ac26165171aa4ed3b87b}\label{classPMTNoise_a0ca6f387c348ac26165171aa4ed3b87b}} 
+void {\bfseries Set\+Dark\+Rate} (const double)
+\item 
+\mbox{\Hypertarget{classPMTNoise_aa4dee3d9e1a567dad4dc150ff19d759a}\label{classPMTNoise_aa4dee3d9e1a567dad4dc150ff19d759a}} 
+void {\bfseries Set\+Dark\+Mode} (const int i)
+\item 
+\mbox{\Hypertarget{classPMTNoise_a384627f994e5439fe39c080f3591ee49}\label{classPMTNoise_a384627f994e5439fe39c080f3591ee49}} 
+void {\bfseries Generate\+Dark\+Noise} (double, double, bool is\+DPE=false, const bool verbose=false)
+\item 
+\mbox{\Hypertarget{classPMTNoise_a6aa0179b0636c23e6cb68cab69f933c7}\label{classPMTNoise_a6aa0179b0636c23e6cb68cab69f933c7}} 
+int {\bfseries Get\+Number\+Of\+Generated\+Dark\+Hits} () const
+\item 
+\mbox{\Hypertarget{classPMTNoise_ab772897016289c0f38af4d683bf29728}\label{classPMTNoise_ab772897016289c0f38af4d683bf29728}} 
+int {\bfseries Get\+Number\+Of\+Generated\+Dark\+Photo\+Electrons} () const
+\item 
+\mbox{\Hypertarget{classPMTNoise_a66184a549c95bf82d80f85d3c2539fa2}\label{classPMTNoise_a66184a549c95bf82d80f85d3c2539fa2}} 
+int {\bfseries Get\+Noise\+Tube} (const int i) const
+\item 
+\mbox{\Hypertarget{classPMTNoise_ad0f90cfbbeece23bbb645b29f95d17e9}\label{classPMTNoise_ad0f90cfbbeece23bbb645b29f95d17e9}} 
+double {\bfseries Get\+Noise\+Time} (const int i) const
+\item 
+\mbox{\Hypertarget{classPMTNoise_a1c2e8901485651a335b6603f2546c870}\label{classPMTNoise_a1c2e8901485651a335b6603f2546c870}} 
+void {\bfseries Add\+Photo\+Electrons} (\mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}} $\ast$)
+\item 
+\mbox{\Hypertarget{classPMTNoise_acc659440fcf209de109587b5cf197644}\label{classPMTNoise_acc659440fcf209de109587b5cf197644}} 
+void {\bfseries Add} (\mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}} $\ast$, double, double)
+\item 
+\mbox{\Hypertarget{classPMTNoise_a599672213e521345292c7752374b5e37}\label{classPMTNoise_a599672213e521345292c7752374b5e37}} 
+void {\bfseries Find\+Ranges} (\mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}} $\ast$, vector$<$ pair$<$ double, double $>$$>$ \&)
+\item 
+\mbox{\Hypertarget{classPMTNoise_a49ab05e6050539142330af0b83adfb30}\label{classPMTNoise_a49ab05e6050539142330af0b83adfb30}} 
+void {\bfseries Add\+Afterpulse} (\mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}} $\ast$, \mbox{\hyperlink{classHitDigitizer}{Hit\+Digitizer}} $\ast$, \mbox{\hyperlink{classPMTResponse}{PMTResponse}} $\ast$pr)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/PMTNoise.\+h\item 
+cpp/src/PMTNoise.\+cc\end{DoxyCompactItemize}

@@ -1,0 +1,95 @@
+\hypertarget{classWCRootData}{}\doxysection{WCRoot\+Data Class Reference}
+\label{classWCRootData}\index{WCRootData@{WCRootData}}
+Inheritance diagram for WCRoot\+Data\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classWCRootData}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWCRootData_a6b012244a0866e89ff7e26616fa3b93c}\label{classWCRootData_a6b012244a0866e89ff7e26616fa3b93c}} 
+void {\bfseries Read\+File} (const char $\ast$, const vector$<$ string $>$ \&v=vector$<$ string $>$())
+\item 
+\mbox{\Hypertarget{classWCRootData_aebe567f14601d9c9bff6636a38a857f7}\label{classWCRootData_aebe567f14601d9c9bff6636a38a857f7}} 
+void {\bfseries Close\+File} ()
+\item 
+\mbox{\Hypertarget{classWCRootData_a2d05e543f4326e995080300a2288b2aa}\label{classWCRootData_a2d05e543f4326e995080300a2288b2aa}} 
+void {\bfseries Create\+Tree} (const char $\ast$, const vector$<$ string $>$ \&v=vector$<$ string $>$())
+\item 
+\mbox{\Hypertarget{classWCRootData_a905f91205f25d6938e2c759ef05ce03e}\label{classWCRootData_a905f91205f25d6938e2c759ef05ce03e}} 
+virtual void {\bfseries Fill\+Tree} ()
+\item 
+\mbox{\Hypertarget{classWCRootData_a1dabe7659b334ff31d449984679890e9}\label{classWCRootData_a1dabe7659b334ff31d449984679890e9}} 
+virtual void {\bfseries Write\+Tree} ()
+\item 
+\mbox{\Hypertarget{classWCRootData_a85e85206d591d821d41a353de89783f3}\label{classWCRootData_a85e85206d591d821d41a353de89783f3}} 
+void {\bfseries Get\+Geometry\+Info} (const char $\ast$)
+\item 
+\mbox{\Hypertarget{classWCRootData_ab21b3c26ba238bb4d0230df49ff4320e}\label{classWCRootData_ab21b3c26ba238bb4d0230df49ff4320e}} 
+void {\bfseries Copy\+Tree} (const char $\ast$, const char $\ast$, const vector$<$ bool $>$ \&v=vector$<$ bool $>$())
+\item 
+\mbox{\Hypertarget{classWCRootData_a91d0595b3fa1c9e7a23636f9b144c846}\label{classWCRootData_a91d0595b3fa1c9e7a23636f9b144c846}} 
+void {\bfseries Set\+Out\+File\+Name} (const char $\ast$f)
+\item 
+\mbox{\Hypertarget{classWCRootData_af51dbddd972fdd63f78d197aa231234f}\label{classWCRootData_af51dbddd972fdd63f78d197aa231234f}} 
+int {\bfseries Get\+Entries} ()
+\item 
+\mbox{\Hypertarget{classWCRootData_acb2e84c431601b3d0a5ed9ab2f8c3c19}\label{classWCRootData_acb2e84c431601b3d0a5ed9ab2f8c3c19}} 
+void {\bfseries Get\+Entry} (int)
+\item 
+\mbox{\Hypertarget{classWCRootData_ae3f5eb8ad981dde60570399b1b1f5036}\label{classWCRootData_ae3f5eb8ad981dde60570399b1b1f5036}} 
+WCSim\+Root\+Trigger $\ast$ {\bfseries Get\+Trigger} (int i, int i\+PMT=0) const
+\item 
+\mbox{\Hypertarget{classWCRootData_a979dec16fe6471c47e6657f8f8807c19}\label{classWCRootData_a979dec16fe6471c47e6657f8f8807c19}} 
+void {\bfseries Add\+True\+Hits\+To\+MDT} (\mbox{\hyperlink{classMDTManager}{MDTManager}} $\ast$)
+\item 
+\mbox{\Hypertarget{classWCRootData_a881a01464111fc0ad04533760fe2586c}\label{classWCRootData_a881a01464111fc0ad04533760fe2586c}} 
+void {\bfseries Add\+True\+Hits\+To\+MDT} (\mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}} $\ast$, \mbox{\hyperlink{classPMTResponse}{PMTResponse}} $\ast$, float offset\+\_\+time=0., int i\+PMT=0)
+\item 
+\mbox{\Hypertarget{classWCRootData_a59de1284533fdb53d80052c672805f31}\label{classWCRootData_a59de1284533fdb53d80052c672805f31}} 
+void {\bfseries Add\+Digi\+Hits} (\mbox{\hyperlink{classMDTManager}{MDTManager}} $\ast$, int event\+\_\+id=0, int i\+PMT=0)
+\item 
+\mbox{\Hypertarget{classWCRootData_a1dbe6b9ae4f847970879dce7d635a88e}\label{classWCRootData_a1dbe6b9ae4f847970879dce7d635a88e}} 
+void {\bfseries Add\+Digi\+Hits} (\mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}} $\ast$hc, \mbox{\hyperlink{classTriggerInfo}{Trigger\+Info}} $\ast$ti, int even\+\_\+it=0, int i\+PMT=0)
+\item 
+\mbox{\Hypertarget{classWCRootData_ac93b953651a1b0bf0ee3fd5ba16a0913}\label{classWCRootData_ac93b953651a1b0bf0ee3fd5ba16a0913}} 
+void {\bfseries Add\+Tracks} (const WCSim\+Root\+Trigger $\ast$, float offset\+\_\+time=0., int i\+PMT=0)
+\item 
+\mbox{\Hypertarget{classWCRootData_a4aa6890281d4d0d0e5ceeb94cc2ee2a6}\label{classWCRootData_a4aa6890281d4d0d0e5ceeb94cc2ee2a6}} 
+const char $\ast$ {\bfseries Get\+Current\+Input\+File\+Name} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWCRootData_a3ffb1b28ad7ba2cd4089afb365a3faaf}\label{classWCRootData_a3ffb1b28ad7ba2cd4089afb365a3faaf}} 
+TChain $\ast$ {\bfseries f\+WCSimC}
+\item 
+\mbox{\Hypertarget{classWCRootData_a41705f827dd67eebac5a6c30d9b33eb6}\label{classWCRootData_a41705f827dd67eebac5a6c30d9b33eb6}} 
+TTree $\ast$ {\bfseries f\+WCSimT}
+\item 
+\mbox{\Hypertarget{classWCRootData_abdad780802eb4b92638909a622cafb35}\label{classWCRootData_abdad780802eb4b92638909a622cafb35}} 
+vector$<$ WCSim\+Root\+Event $\ast$ $>$ {\bfseries f\+Sp\+Evt}
+\item 
+\mbox{\Hypertarget{classWCRootData_a5971565d471917441f377379895683ed}\label{classWCRootData_a5971565d471917441f377379895683ed}} 
+vector$<$ bool $>$ {\bfseries is\+OD}
+\item 
+\mbox{\Hypertarget{classWCRootData_aef72e3c106f5880bc9b159706b7f8164}\label{classWCRootData_aef72e3c106f5880bc9b159706b7f8164}} 
+WCSim\+Root\+Geom $\ast$ {\bfseries f\+WCGeom}
+\item 
+\mbox{\Hypertarget{classWCRootData_a17c9a9989853bd38acbaacb909a39d5e}\label{classWCRootData_a17c9a9989853bd38acbaacb909a39d5e}} 
+Float\+\_\+t {\bfseries f\+Det\+CentreY}
+\item 
+\mbox{\Hypertarget{classWCRootData_a8be9990b5dfd361070099c7ad64eea57}\label{classWCRootData_a8be9990b5dfd361070099c7ad64eea57}} 
+float {\bfseries f\+Hit\+Time\+Offset}
+\item 
+\mbox{\Hypertarget{classWCRootData_a0a089e1ef0fb2a19edba2f31f97c9652}\label{classWCRootData_a0a089e1ef0fb2a19edba2f31f97c9652}} 
+bool {\bfseries f\+Mult\+Digi\+Hits}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+app/utilities/\+WCRoot\+Data/include/WCRoot\+Data.\+h\item 
+app/utilities/\+WCRoot\+Data/src/WCRoot\+Data.\+cc\end{DoxyCompactItemize}

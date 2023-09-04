@@ -1,0 +1,104 @@
+\hypertarget{classWCRootDataNuInt}{}\doxysection{WCRoot\+Data\+Nu\+Int Class Reference}
+\label{classWCRootDataNuInt}\index{WCRootDataNuInt@{WCRootDataNuInt}}
+Inheritance diagram for WCRoot\+Data\+Nu\+Int\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classWCRootDataNuInt}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a382be404d3f69f0c2627206d5e2d94b1}\label{classWCRootDataNuInt_a382be404d3f69f0c2627206d5e2d94b1}} 
+void {\bfseries Set\+Seed} (const int i)
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a666a1a354810c4f5d26f532758fff8db}\label{classWCRootDataNuInt_a666a1a354810c4f5d26f532758fff8db}} 
+void {\bfseries Load\+Files} (const char $\ast$)
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a8b01faf305c1bd942e504899f92478fb}\label{classWCRootDataNuInt_a8b01faf305c1bd942e504899f92478fb}} 
+virtual bool {\bfseries Next} ()
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_acd8e483a2e7c76552337d37b93dcc6f1}\label{classWCRootDataNuInt_acd8e483a2e7c76552337d37b93dcc6f1}} 
+void {\bfseries Set\+NDigits\+File\+IDNumber} (int i)
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a6817cac0404979381c9c3aef7d46ddf8}\label{classWCRootDataNuInt_a6817cac0404979381c9c3aef7d46ddf8}} 
+int {\bfseries Get\+Event\+Id\+Number} () const
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_abcece3e4dcd7768fa448bd7403af6de6}\label{classWCRootDataNuInt_abcece3e4dcd7768fa448bd7403af6de6}} 
+int {\bfseries Get\+File\+Id\+Number} () const
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a2d1e6b873d7c001ea69bf24f04d8b204}\label{classWCRootDataNuInt_a2d1e6b873d7c001ea69bf24f04d8b204}} 
+void {\bfseries Set\+Interaction\+Rate} (const float f)
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_aa48455d71cc99fe83dc8277b51260956}\label{classWCRootDataNuInt_aa48455d71cc99fe83dc8277b51260956}} 
+int {\bfseries Draw\+Num\+Of\+Interaction} () const
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a18947dbbcb5bf27e7894dfd2eb1dbbcb}\label{classWCRootDataNuInt_a18947dbbcb5bf27e7894dfd2eb1dbbcb}} 
+unsigned {\bfseries Get\+Interaction\+Type} () const
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_ae8a5c03787ba317cc763e461b1528703}\label{classWCRootDataNuInt_ae8a5c03787ba317cc763e461b1528703}} 
+virtual float {\bfseries Get\+Energy\+Deposition\+In\+OD} () const
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a4968be9db0022ec22b30d8444872ad02}\label{classWCRootDataNuInt_a4968be9db0022ec22b30d8444872ad02}} 
+virtual void {\bfseries Set\+Interaction\+Information} (\mbox{\hyperlink{structPileUpSpill__t}{Pile\+Up\+Spill\+\_\+t}} $\ast$) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a5a8daf00c3978bab64989d12b03002c5}\label{classWCRootDataNuInt_a5a8daf00c3978bab64989d12b03002c5}} 
+int {\bfseries Get\+File\+Id\+Number} (const char $\ast$, const char $\ast$prefix=\char`\"{}wcsim.\char`\"{})
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a229becc028fe7ab4d3879f7ec8649bf5}\label{classWCRootDataNuInt_a229becc028fe7ab4d3879f7ec8649bf5}} 
+virtual void {\bfseries Read\+Friend} (const char $\ast$f)
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a84d67afa68c6cd992371ef7295d989d8}\label{classWCRootDataNuInt_a84d67afa68c6cd992371ef7295d989d8}} 
+virtual void {\bfseries Close\+Friend} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_ad4d92e6389c6a5609cb8c538b3d41fe0}\label{classWCRootDataNuInt_ad4d92e6389c6a5609cb8c538b3d41fe0}} 
+TRandom3 $\ast$ {\bfseries f\+Rnd}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_afc20e13fefaa9afe54fcd39ffd3a7d6e}\label{classWCRootDataNuInt_afc20e13fefaa9afe54fcd39ffd3a7d6e}} 
+std\+::vector$<$ pair$<$ TString, int $>$ $>$ {\bfseries f\+File\+List}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a7be56506384ca1ae23b648540b11d706}\label{classWCRootDataNuInt_a7be56506384ca1ae23b648540b11d706}} 
+std\+::vector$<$ pair$<$ TString, int $>$ $>$ {\bfseries f\+Friend\+List}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a79da97fe830be25c0228e18979180d38}\label{classWCRootDataNuInt_a79da97fe830be25c0228e18979180d38}} 
+TChain $\ast$ {\bfseries f\+FriendC}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a540c811dc9c51d0146a9efefe256d3b2}\label{classWCRootDataNuInt_a540c811dc9c51d0146a9efefe256d3b2}} 
+bool {\bfseries f\+Has\+Friend}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_af2b11977df9e7c4182d0726f884a4b05}\label{classWCRootDataNuInt_af2b11977df9e7c4182d0726f884a4b05}} 
+unsigned int {\bfseries f\+Nu\+Int\+Type}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a6e7be0ee86a1f2de0feca5e0a7dcc22c}\label{classWCRootDataNuInt_a6e7be0ee86a1f2de0feca5e0a7dcc22c}} 
+int {\bfseries f\+Itr\+Entry}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a473a5d2fc518b26027eff04b74002171}\label{classWCRootDataNuInt_a473a5d2fc518b26027eff04b74002171}} 
+int {\bfseries f\+Itr\+File}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a49061d5ba579f04eb43319a110102e1a}\label{classWCRootDataNuInt_a49061d5ba579f04eb43319a110102e1a}} 
+int {\bfseries f\+Num\+Entries}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a4ed17bd514e1e229f086ffc68b9c5b11}\label{classWCRootDataNuInt_a4ed17bd514e1e229f086ffc68b9c5b11}} 
+int {\bfseries f\+Num\+Files}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a554ae63e12311ce6dfcfc1b391bece24}\label{classWCRootDataNuInt_a554ae63e12311ce6dfcfc1b391bece24}} 
+int {\bfseries f\+File\+Id\+Num}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_afb2e11c4a9f8a05db48baafdaec66de8}\label{classWCRootDataNuInt_afb2e11c4a9f8a05db48baafdaec66de8}} 
+int {\bfseries f\+NDigits\+File\+Id\+Num}
+\item 
+\mbox{\Hypertarget{classWCRootDataNuInt_a50a7561963039576857ead6269bf1c28}\label{classWCRootDataNuInt_a50a7561963039576857ead6269bf1c28}} 
+float {\bfseries f\+Int\+Rate}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+app/utilities/\+WCRoot\+Data/include/WCRoot\+Data\+Nu\+Int.\+h\item 
+app/utilities/\+WCRoot\+Data/src/WCRoot\+Data\+Nu\+Int.\+cc\end{DoxyCompactItemize}

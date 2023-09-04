@@ -1,0 +1,40 @@
+\hypertarget{classPMTResponse}{}\doxysection{PMTResponse Class Reference}
+\label{classPMTResponse}\index{PMTResponse@{PMTResponse}}
+Inheritance diagram for PMTResponse\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.718446cm]{classPMTResponse}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classPMTResponse_a65002530bdbcee2461d6b356b2b4fc06}\label{classPMTResponse_a65002530bdbcee2461d6b356b2b4fc06}} 
+virtual double {\bfseries Get\+Raw\+SPE} (const \mbox{\hyperlink{classTrueHit}{True\+Hit}} $\ast$th=NULL, const \mbox{\hyperlink{classHitTube}{Hit\+Tube}} $\ast$ht=NULL)=0
+\item 
+\mbox{\Hypertarget{classPMTResponse_a3dc784c5e25501448f821b919fc5cb52}\label{classPMTResponse_a3dc784c5e25501448f821b919fc5cb52}} 
+virtual float {\bfseries Hit\+Time\+Smearing} (float)=0
+\item 
+\mbox{\Hypertarget{classPMTResponse_a06233ba2cc45d77940795327aacb1ffe}\label{classPMTResponse_a06233ba2cc45d77940795327aacb1ffe}} 
+virtual void {\bfseries Initialize} (int, const string \&s=\char`\"{}\char`\"{})=0
+\item 
+\mbox{\Hypertarget{classPMTResponse_a428151879384837d6142cd7afcf0b046}\label{classPMTResponse_a428151879384837d6142cd7afcf0b046}} 
+virtual bool {\bfseries Apply\+DE} (const \mbox{\hyperlink{classTrueHit}{True\+Hit}} $\ast$th=NULL, const \mbox{\hyperlink{classHitTube}{Hit\+Tube}} $\ast$ht=NULL)=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classPMTResponse_aac4b9e1cd6f5df7bd633ef94c766092f}\label{classPMTResponse_aac4b9e1cd6f5df7bd633ef94c766092f}} 
+\mbox{\hyperlink{classMTRandom}{MTRandom}} $\ast$ {\bfseries f\+Rand}
+\item 
+\mbox{\Hypertarget{classPMTResponse_a4892a492d9b33daaf0d2840ce1a1282b}\label{classPMTResponse_a4892a492d9b33daaf0d2840ce1a1282b}} 
+string {\bfseries f\+PMTType}
+\item 
+\mbox{\Hypertarget{classPMTResponse_ac778c23ba85dd943f4940ac2b7700011}\label{classPMTResponse_ac778c23ba85dd943f4940ac2b7700011}} 
+float {\bfseries f\+Scl\+Fac\+TTS}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/PMTResponse.\+h\end{DoxyCompactItemize}
