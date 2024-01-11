@@ -93,11 +93,28 @@ WCTE/WCSim usage</h1>
 </div><!-- fragment --><p> Then set up the MDT environment. </p><div class="fragment"><div class="line">source envMDT.sh</div>
 <div class="line">cd $MDTROOT/cpp; make clean; make all</div>
 <div class="line">cd $MDTROOT/app/utilities/WCRootData; make clean; make all</div>
-<div class="line">cd $MDTROOT/app/application; make clean; make appIWCDSingleEvent</div>
+<div class="line">cd $MDTROOT/app/application; make clean; make all</div>
 <div class="line">cd $MDTROOT</div>
 <div class="line"># edit variables properly in run_test_mdt4wcte.sh</div>
 <div class="line">bash run_test_mdt4iwcd.sh</div>
-</div><!-- fragment --> </div></div><!-- contents -->
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md2"></a>
+IWCD usage</h1>
+<p>Essentially the same usage but with OD support. </p><div class="fragment"><div class="line"># edit variables properly in run_test_mdt4iwcd.sh</div>
+<div class="line">bash run_test_mdt4iwcd.sh</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+IWCD pile-up generation</h1>
+<p>Example usage </p><div class="fragment"><div class="line">$MDTROOT/app/application/appGenPileUpSpill $MDTROOT/example/genPileUpConfig.txt</div>
+</div><!-- fragment --><p> The application generates pile-up events by combining ID neutrino interaction events and beam background events in a spill.</p>
+<p>Input variables are:</p><ul>
+<li><code>ListIDNuIntFiles</code>,<code>ListBeamBkgFiles</code>: list of WCSim output files for the ID and background events</li>
+<li><code>OutFileNamePrefix</code>: output file name will be something like "OutFileNamePrefix".00000.root</li>
+<li><code>MDTParFile</code>: MDT config file</li>
+<li><code>InitialSeed</code>: Random seed</li>
+<li><code>IDNuIntRate</code>,<code>BeamBkgRate</code>: Mean number of ID and background events per spill. In each spill, the actual number of interactions are drawn from a Poisson distribution, and interaction timing according to the bunch structure (see <code><a class="el" href="classBeamTiming.html">BeamTiming</a></code> class under <code>app/utilities/WCRootData/</code>)</li>
+<li><code>UseOD</code>: Process OD hits</li>
+<li><code>NumOfSpillsSavedPerFile</code>, <code>TotalNumOfSpills</code>: output spill setup </li>
+</ul>
+</div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

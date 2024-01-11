@@ -37,10 +37,34 @@ Simple runtime procedures. First set up your ROOT and WCSIM\+:
 \DoxyCodeLine{source envMDT.sh}
 \DoxyCodeLine{cd \$MDTROOT/cpp; make clean; make all}
 \DoxyCodeLine{cd \$MDTROOT/app/utilities/WCRootData; make clean; make all}
-\DoxyCodeLine{cd \$MDTROOT/app/application; make clean; make appIWCDSingleEvent}
+\DoxyCodeLine{cd \$MDTROOT/app/application; make clean; make all}
 \DoxyCodeLine{cd \$MDTROOT}
 \DoxyCodeLine{\# edit variables properly in run\_test\_mdt4wcte.sh}
 \DoxyCodeLine{bash run\_test\_mdt4iwcd.sh}
 
 \end{DoxyCode}
- 
+\hypertarget{md_README_autotoc_md2}{}\doxysection{IWCD usage}\label{md_README_autotoc_md2}
+Essentially the same usage but with OD support. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\# edit variables properly in run\_test\_mdt4iwcd.sh}
+\DoxyCodeLine{bash run\_test\_mdt4iwcd.sh}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md3}{}\doxysection{IWCD pile-\/up generation}\label{md_README_autotoc_md3}
+Example usage 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$MDTROOT/app/application/appGenPileUpSpill \$MDTROOT/example/genPileUpConfig.txt}
+
+\end{DoxyCode}
+ The application generates pile-\/up events by combining ID neutrino interaction events and beam background events in a spill.
+
+Input variables are\+:
+\begin{DoxyItemize}
+\item {\ttfamily List\+IDNu\+Int\+Files},{\ttfamily List\+Beam\+Bkg\+Files}\+: list of WCSim output files for the ID and background events
+\item {\ttfamily Out\+File\+Name\+Prefix}\+: output file name will be something like \char`\"{}\+Out\+File\+Name\+Prefix\char`\"{}.00000.\+root
+\item {\ttfamily MDTPar\+File}\+: MDT config file
+\item {\ttfamily Initial\+Seed}\+: Random seed
+\item {\ttfamily IDNu\+Int\+Rate},{\ttfamily Beam\+Bkg\+Rate}\+: Mean number of ID and background events per spill. In each spill, the actual number of interactions are drawn from a Poisson distribution, and interaction timing according to the bunch structure (see {\ttfamily \mbox{\hyperlink{classBeamTiming}{Beam\+Timing}}} class under {\ttfamily app/utilities/\+WCRoot\+Data/})
+\item {\ttfamily Use\+OD}\+: Process OD hits
+\item {\ttfamily Num\+Of\+Spills\+Saved\+Per\+File}, {\ttfamily Total\+Num\+Of\+Spills}\+: output spill setup 
+\end{DoxyItemize}
