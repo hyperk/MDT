@@ -1,8 +1,8 @@
 CXX=g++
 LD=g++
 
-CXXFLAGS += -Wall -O2 -std=c++11 -g -fPIC -I./include
-LDFLAGS += -shared
+CXXFLAGS += -Wall -O2 -std=c++11 -g -fPIC -I./include $(shell root-config --cflags)
+LDFLAGS += -shared $(shell root-config --ldflags) $(shell root-config --libs)
 
 TARGET=libMDT.so
 SRCDIR = ./src

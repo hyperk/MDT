@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <TGraph.h>
 #include "MTRandom.h"
 #include "HitTube.h"
 
@@ -77,4 +78,17 @@ class Response3inchR14374 : public GenericPMTResponse
 
     private:
         double fTimeResAt1PE;
+};
+
+class Response3inchR14374_WCTE : public GenericPMTResponse
+{
+    public: 
+        Response3inchR14374_WCTE(int, const string &s="");
+        Response3inchR14374_WCTE();
+        virtual ~Response3inchR14374_WCTE();
+        float HitTimeSmearing(float);
+        void Initialize(int, const string &s="");
+        
+    private:
+        TGraph  *gTResol = nullptr; // timing resolution
 };
