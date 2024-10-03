@@ -239,6 +239,8 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
         }
         else
         {
+            // large hit time could invalidate time comparison 
+            if (digiPEs.size()==0) return;
 
             TH1F hWT = BuildWavetrain(digiPEs, fIntegWindow);
             this->FitWavetrain(hWT,digiT,digiQ);
