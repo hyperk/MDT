@@ -18,12 +18,14 @@ using std::vector;
 GenericPMTResponse::GenericPMTResponse(int seed, const string &pmtname)
 {
     fSclFacTTS = 1.0;
+    fLoadDE = 0;
     this->Initialize(seed, pmtname);
 }
 
 GenericPMTResponse::GenericPMTResponse()
 {
     fSclFacTTS = 1.0;
+    fLoadDE = 0;
 }
 
 GenericPMTResponse::~GenericPMTResponse()
@@ -44,6 +46,7 @@ void GenericPMTResponse::Initialize(int seed, const string &pmtname)
     s["TimingResMinimum"] = "TimingResMinimum"; 
     s["ScalFactorTTS"] = "ScalFactorTTS";
     s["SPECDFFile"] = "SPECDFFile";
+    s["PMTDE"] = "PMTDE";
 
     if( fPMTType!="" )
     {
@@ -59,8 +62,10 @@ void GenericPMTResponse::Initialize(int seed, const string &pmtname)
     Conf->GetValue<float>(s["TimingResMinimum"], fTResMinimum);
     Conf->GetValue<float>(s["ScalFactorTTS"], fSclFacTTS);
     Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
+    Conf->GetValue<string>(s["PMTDE"], fPMTDEFile);
 
     this->LoadCDFOfSPE(fTxtFileSPECDF);
+    this->LoadPMTDE(fPMTDEFile);
 }
 
 
@@ -76,6 +81,19 @@ double GenericPMTResponse::GetRawSPE(const TrueHit* th, const HitTube* ht)
 
 bool GenericPMTResponse::ApplyDE(const TrueHit* th, const HitTube *ht)
 {
+    if (fLoadDE>0 && ht)
+    {
+        int tubeID = ht->GetTubeID();
+        if (tubeID>=fLoadDE)
+        {
+            cout<<" GenericPMTResponse::ApplyDE" <<endl;
+            cout<<"  - tubeID = " << tubeID << " >= fLoadDE = " << fLoadDE << endl;
+            cout<<"  -> EXIT" <<endl;
+            exit(-1);
+        }
+        return fRand->Rndm() < fDE[tubeID];
+    }
+
     return true;
 }
 
@@ -122,6 +140,40 @@ void GenericPMTResponse::LoadCDFOfSPE(const string &filename)
     for(unsigned int i=0; i<nBin; i++)
     {
         fqpe0[i] = qCDF[i];
+    }
+}
+
+void GenericPMTResponse::LoadPMTDE(const string &filename)
+{
+    fLoadDE = 0;
+    fDE.clear();
+    ifstream ifs(filename.c_str());
+    if (!ifs)
+    {
+        cout<<" GenericPMTResponse::LoadPMTDE" <<endl;
+        cout<<"  - No PMT QE file: " << filename <<endl;
+        cout<<"  - Do not apply DE " << endl;
+    }
+    string aLine;
+    while( std::getline(ifs, aLine) )
+    {
+        if( aLine[0] == '#' ){ continue; }
+        stringstream ssline(aLine);
+        string item;
+        while (getline(ssline, item, ssline.widen(' ')))
+        {
+            fDE.push_back( atof(item.c_str()) );
+        }
+    }
+    ifs.close();
+
+    fLoadDE = fDE.size();
+
+    if (fLoadDE>0)
+    {
+        cout<<" GenericPMTResponse::LoadPMTDE" <<endl;
+        cout<<"  - Load PMT QE file: " << filename <<endl;
+        cout<<"  - # Entries = " << fLoadDE << endl;
     }
 }
 
@@ -285,6 +337,7 @@ void Response3inchR14374_WCTE::Initialize(int seed, const string &pmtname)
     map<string, string> s;
     s["ScalFactorTTS"] = "ScalFactorTTS";
     s["SPECDFFile"] = "SPECDFFile";
+    s["PMTDE"] = "PMTDE";
     if( fPMTType!="" )
     {
         map<string, string>::iterator i;
@@ -296,7 +349,9 @@ void Response3inchR14374_WCTE::Initialize(int seed, const string &pmtname)
     Configuration *Conf = Configuration::GetInstance();
     Conf->GetValue<float>(s["ScalFactorTTS"], fSclFacTTS);
     Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
+    Conf->GetValue<string>(s["PMTDE"], fPMTDEFile);
     this->LoadCDFOfSPE(fTxtFileSPECDF);
+    this->LoadPMTDE(fPMTDEFile);
 }
 
 float Response3inchR14374_WCTE::HitTimeSmearing(float Q)

@@ -11,13 +11,8 @@ class PMTResponse3inchR12199_02 : public GenericPMTResponse
         float HitTimeSmearing(float);
         float HitTimeSmearing(float, int);
         void Initialize(int, const string &s="");
-        bool ApplyDE(const TrueHit* th=NULL, const HitTube* ht=NULL);
 
     private:
-        string fPMTDEFile;
-        int fLoadDE;
-        std::vector<double> fDE;
-        void LoadPMTDE(const string &s);
         string fPMTTFile;
         int fLoadT;
         std::vector<double> fT;

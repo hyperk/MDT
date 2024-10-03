@@ -46,6 +46,10 @@ class GenericPMTResponse : public PMTResponse
         void LoadCDFOfSPE(const string &s);
         float fqpe0[501];
         string fTxtFileSPECDF;
+        void LoadPMTDE(const string &s);
+        int fLoadDE;
+        std::vector<double> fDE;
+        string fPMTDEFile;
 
     //private:
     protected:

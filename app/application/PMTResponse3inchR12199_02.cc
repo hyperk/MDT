@@ -52,40 +52,6 @@ void PMTResponse3inchR12199_02::Initialize(int seed, const string &pmtname)
     this->LoadPMTTime(fPMTTFile);
 }
 
-void PMTResponse3inchR12199_02::LoadPMTDE(const string &filename)
-{
-    fLoadDE = 0;
-    fDE.clear();
-    ifstream ifs(filename.c_str());
-    if (!ifs)
-    {
-        cout<<" PMTResponse3inchR12199_02::LoadPMTDE" <<endl;
-        cout<<"  - No PMT QE file: " << filename <<endl;
-        cout<<"  - Do not apply DE " << endl;
-    }
-    string aLine;
-    while( std::getline(ifs, aLine) )
-    {
-        if( aLine[0] == '#' ){ continue; }
-        stringstream ssline(aLine);
-        string item;
-        while (getline(ssline, item, ssline.widen(' ')))
-        {
-            fDE.push_back( atof(item.c_str()) );
-        }
-    }
-    ifs.close();
-
-    fLoadDE = fDE.size();
-
-    if (fLoadDE>0)
-    {
-        cout<<" PMTResponse3inchR12199_02::LoadPMTDE" <<endl;
-        cout<<"  - Load PMT QE file: " << filename <<endl;
-        cout<<"  - # Entries = " << fLoadDE << endl;
-    }
-}
-
 void PMTResponse3inchR12199_02::LoadPMTTime(const string &filename)
 {
     fLoadT = 0;
@@ -117,24 +83,6 @@ void PMTResponse3inchR12199_02::LoadPMTTime(const string &filename)
         cout<<"  - Load PMT Time file: " << filename <<endl;
         cout<<"  - # Entries = " << fLoadT << endl;
     }
-}
-
-bool PMTResponse3inchR12199_02::ApplyDE(const TrueHit* th, const HitTube *ht)
-{
-    if (fLoadDE>0 && ht)
-    {
-        int tubeID = ht->GetTubeID();
-        if (tubeID>=fLoadDE)
-        {
-            cout<<" PMTResponse3inchR12199_02::ApplyDE" <<endl;
-            cout<<"  - tubeID = " << tubeID << " >= fLoadDE = " << fLoadDE << endl;
-            cout<<"  -> EXIT" <<endl;
-            exit(-1);
-        }
-        return fRand->Rndm() < fDE[tubeID];
-    }
-
-    return true;
 }
 
 float PMTResponse3inchR12199_02::HitTimeSmearing(float Q)
