@@ -164,27 +164,3 @@ float PMTResponse3inchR12199_02::HitTimeSmearing(float Q, int tubeID)
 
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
-
-PMTResponse3inchR14374::PMTResponse3inchR14374(int seed, const string &pmtname)
-{
-    this->Initialize(seed, pmtname);
-}
-
-PMTResponse3inchR14374::PMTResponse3inchR14374()
-{
-}
-
-PMTResponse3inchR14374::~PMTResponse3inchR14374()
-{
-}
-
-void PMTResponse3inchR14374::Initialize(int seed, const string &pmtname)
-{
-    GenericPMTResponse::Initialize(seed, pmtname);
-}
-
-float PMTResponse3inchR14374::HitTimeSmearing(float Q)
-{
-    float timingResolution = 0.6*fSclFacTTS;
-    return fRand->Gaus(0.0,timingResolution);
-}
