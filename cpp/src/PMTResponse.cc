@@ -19,6 +19,7 @@ GenericPMTResponse::GenericPMTResponse(int seed, const string &pmtname)
 {
     fSclFacTTS = 1.0;
     fLoadDE = 0;
+    fLoadT = 0;
     this->Initialize(seed, pmtname);
 }
 
@@ -26,6 +27,7 @@ GenericPMTResponse::GenericPMTResponse()
 {
     fSclFacTTS = 1.0;
     fLoadDE = 0;
+    fLoadT = 0;
 }
 
 GenericPMTResponse::~GenericPMTResponse()
@@ -47,6 +49,7 @@ void GenericPMTResponse::Initialize(int seed, const string &pmtname)
     s["ScalFactorTTS"] = "ScalFactorTTS";
     s["SPECDFFile"] = "SPECDFFile";
     s["PMTDE"] = "PMTDE";
+    s["PMTTime"] = "PMTTime";
 
     if( fPMTType!="" )
     {
@@ -63,9 +66,11 @@ void GenericPMTResponse::Initialize(int seed, const string &pmtname)
     Conf->GetValue<float>(s["ScalFactorTTS"], fSclFacTTS);
     Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
     Conf->GetValue<string>(s["PMTDE"], fPMTDEFile);
+    Conf->GetValue<string>(s["PMTTime"], fPMTTFile);
 
     this->LoadCDFOfSPE(fTxtFileSPECDF);
     this->LoadPMTDE(fPMTDEFile);
+    this->LoadPMTTime(fPMTTFile);
 }
 
 
@@ -106,9 +111,22 @@ float GenericPMTResponse::HitTimeSmearing(float Q)
     if( timingResolution<fTResMinimum ){ timingResolution = fTResMinimum; }
     return fRand->Gaus(0.0,timingResolution);
 }
-float GenericPMTResponse::HitTimeSmearing(float Q, int tubeID) 
+
+float GenericPMTResponse::HitTimeSmearing(float Q, int tubeID)
 {
-    return HitTimeSmearing(Q);
+    if (fLoadT>0)
+    {
+        if (tubeID>=fLoadT)
+        {
+            cout<<" GenericPMTResponse::HitTimeSmearing" <<endl;
+            cout<<"  - tubeID = " << tubeID << " >= fLoadT = " << fLoadT << endl;
+            cout<<"  -> EXIT" <<endl;
+            exit(-1);
+        }
+        return fT[tubeID];
+    }
+
+    return 0;
 }
 
 void GenericPMTResponse::LoadCDFOfSPE(const string &filename)
@@ -174,6 +192,39 @@ void GenericPMTResponse::LoadPMTDE(const string &filename)
         cout<<" GenericPMTResponse::LoadPMTDE" <<endl;
         cout<<"  - Load PMT QE file: " << filename <<endl;
         cout<<"  - # Entries = " << fLoadDE << endl;
+    }
+}
+
+void GenericPMTResponse::LoadPMTTime(const string &filename)
+{
+    fLoadT = 0;
+    fT.clear();
+    ifstream ifs(filename.c_str());
+    if (!ifs)
+    {
+        cout<<" GenericPMTResponse::LoadPMTTime" <<endl;
+        cout<<"  - No PMT Time file: " << filename <<endl;
+        cout<<"  - Do not apply individual PMT timing " << endl;
+    }
+    string aLine;
+    while( std::getline(ifs, aLine) )
+    {
+        if( aLine[0] == '#' ){ continue; }
+        stringstream ssline(aLine);
+        string item;
+        while (getline(ssline, item, ssline.widen(' ')))
+        {
+            fT.push_back( atof(item.c_str()) );
+        }
+    }
+    ifs.close();
+
+    fLoadT = fT.size();
+    if (fLoadT>0)
+    {
+        cout<<" GenericPMTResponse::LoadPMTTime" <<endl;
+        cout<<"  - Load PMT Time file: " << filename <<endl;
+        cout<<"  - # Entries = " << fLoadT << endl;
     }
 }
 
@@ -338,6 +389,7 @@ void Response3inchR14374_WCTE::Initialize(int seed, const string &pmtname)
     s["ScalFactorTTS"] = "ScalFactorTTS";
     s["SPECDFFile"] = "SPECDFFile";
     s["PMTDE"] = "PMTDE";
+    s["PMTTime"] = "PMTTime";
     if( fPMTType!="" )
     {
         map<string, string>::iterator i;
@@ -350,8 +402,10 @@ void Response3inchR14374_WCTE::Initialize(int seed, const string &pmtname)
     Conf->GetValue<float>(s["ScalFactorTTS"], fSclFacTTS);
     Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
     Conf->GetValue<string>(s["PMTDE"], fPMTDEFile);
+    Conf->GetValue<string>(s["PMTTime"], fPMTTFile);
     this->LoadCDFOfSPE(fTxtFileSPECDF);
     this->LoadPMTDE(fPMTDEFile);
+    this->LoadPMTTime(fPMTTFile);
 }
 
 float Response3inchR14374_WCTE::HitTimeSmearing(float Q)

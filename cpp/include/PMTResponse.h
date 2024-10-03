@@ -50,6 +50,10 @@ class GenericPMTResponse : public PMTResponse
         int fLoadDE;
         std::vector<double> fDE;
         string fPMTDEFile;
+        void LoadPMTTime(const string &s);
+        int fLoadT;
+        std::vector<double> fT;
+        string fPMTTFile;
 
     //private:
     protected:

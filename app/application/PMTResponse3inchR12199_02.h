@@ -9,12 +9,5 @@ class PMTResponse3inchR12199_02 : public GenericPMTResponse
         PMTResponse3inchR12199_02();
         virtual ~PMTResponse3inchR12199_02();
         float HitTimeSmearing(float);
-        float HitTimeSmearing(float, int);
         void Initialize(int, const string &s="");
-
-    private:
-        string fPMTTFile;
-        int fLoadT;
-        std::vector<double> fT;
-        void LoadPMTTime(const string &s);
 };
