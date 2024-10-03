@@ -88,6 +88,10 @@ float GenericPMTResponse::HitTimeSmearing(float Q)
     if( timingResolution<fTResMinimum ){ timingResolution = fTResMinimum; }
     return fRand->Gaus(0.0,timingResolution);
 }
+float GenericPMTResponse::HitTimeSmearing(float Q, int tubeID) 
+{
+    return HitTimeSmearing(Q);
+}
 
 void GenericPMTResponse::LoadCDFOfSPE(const string &filename)
 {

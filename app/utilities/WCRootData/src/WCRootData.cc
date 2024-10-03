@@ -15,12 +15,22 @@ WCRootData::WCRootData()
 
     int mult_flag = 1;
     fHitTimeOffset = 0.;
+    int save_wf = 0;
 
     Configuration *Conf = Configuration::GetInstance();
     Conf->GetValue<float>("TimeOffset", fHitTimeOffset);
     Conf->GetValue<int>("FlagMultDigits", mult_flag);
+    Conf->GetValue<int>("SaveWaveform", save_wf);
 
     fMultDigiHits = bool(mult_flag);
+    fSaveWF = bool(save_wf);
+
+    fWCSimDigiWFT = 0;
+    fWCSimDigiPulls = 0;
+    fPullQ = -99.;
+    fPullT = -99.;
+    fTrueQ = -99.;
+    fTrueT = -99.;
 }
 
 WCRootData::~WCRootData()
@@ -28,6 +38,8 @@ WCRootData::~WCRootData()
     if( fWCGeom ){ delete fWCGeom; fWCGeom = 0; }
     if( fWCSimT ){ delete fWCSimT; fWCSimT = 0; }
     if( fWCSimC ){ delete fWCSimC; fWCSimC = 0; }
+    if( fWCSimDigiWFT ){ delete fWCSimDigiWFT; fWCSimDigiWFT = 0; }
+    if( fWCSimDigiPulls ){ delete fWCSimDigiPulls; fWCSimDigiPulls = 0; }
     fSpEvt.clear();
     fSpEvt.shrink_to_fit();
     isOD.clear();
@@ -92,7 +104,7 @@ void WCRootData::AddTrueHitsToMDT(HitTubeCollection *hc, PMTResponse *pr, float 
             th->SetStartTime(aHitTime->GetPhotonStartTime()+intTime);
             for(int k=0; k<3; k++){ th->SetStartPosition(k, aHitTime->GetPhotonStartPos(k)); }
             th->SetCreatorProcess((int)(aHitTime->GetPhotonCreatorProcess()));
-            if( !pr->ApplyDE(th) ){ continue; }
+            if( !pr->ApplyDE(th,&(*hc)[tubeID]) ){ continue; }
 
             (&(*hc)[tubeID])->AddRawPE(th);
         }
@@ -186,7 +198,26 @@ void WCRootData::CreateTree(const char *filename, const vector<string> &list)
             fWCSimT->Branch(list[i].c_str(), bAddress, &fSpEvt[i], bufferSize, 2);
             if ( list[i].find("OD")!=std::string::npos ) isOD[i] = true;
         }
+
+        if (fSaveWF) 
+        {
+            fWCSimDigiWFT = new TTree("wcsimDigiWFTree","Digitized waveform for each PMT");
+            fDigiWF.clear();
+            fDigiWF = vector<TClonesArray*>(list.size(), 0);
+            for(unsigned int i=0; i<list.size(); i++)
+            {
+                fDigiWF[i] = new TClonesArray("TH1F");
+                fWCSimDigiWFT->Branch(Form("%s_waveform",list[i].c_str()),&fDigiWF[i]);
+            }
+
+            fWCSimDigiPulls = new TTree("WCSimDigiPulls","Time and charge pulls of digitized hits");
+            fWCSimDigiPulls->Branch("PullQ",&fPullQ);
+            fWCSimDigiPulls->Branch("PullT",&fPullT);
+            fWCSimDigiPulls->Branch("TrueQ",&fTrueQ);
+            fWCSimDigiPulls->Branch("TrueT",&fTrueT);
+        }
     }
+
 }
 
 void WCRootData::AddDigiHits(MDTManager *mdt, int eventID, int iPMT)
@@ -333,6 +364,39 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
         WCSimRootEventHeader *eh = anEvent->GetHeader();
         eh->SetDate( int(triggerTime) );
     }
+    
+    if (fSaveWF)
+    {
+        TClonesArray &fDigiWFarray = *(fDigiWF[iPMT]);
+        for(hc->Begin(); !hc->IsEnd(); hc->Next())
+        {
+            HitTube *aPH = &(*hc)();
+
+            // if (aPH->GetDigiWF())
+            //     new(fDigiWFarray[aPH->GetTubeID()-1]) TH1F(*(aPH->GetDigiWF()));
+            // else new(fDigiWFarray[aPH->GetTubeID()-1]) TH1F();
+            TH1F* h = (TH1F*)fDigiWFarray.ConstructedAt(aPH->GetTubeID()-1);
+            if (aPH->GetDigiWF()) 
+            {
+                int nbins = aPH->GetDigiWF()->GetNbinsX();
+                h->SetBins(nbins,aPH->GetDigiWF()->GetBinLowEdge(1),aPH->GetDigiWF()->GetBinLowEdge(nbins+1));
+                for (int i=1;i<=nbins;i++) h->SetBinContent(i,aPH->GetDigiWF()->GetBinContent(i));
+            }
+            else
+            {
+                h->Reset();
+            }
+            
+
+            fPullQ = aPH->GetPullQ();
+            fPullT = aPH->GetPullT();
+            fTrueQ = aPH->GetTrueQ();
+            fTrueT = aPH->GetTrueT();
+            fWCSimDigiPulls->Fill();
+
+            aPH = NULL;
+        } // PMT loop
+    }
 }
 
 void WCRootData::FillTree()
@@ -344,6 +408,14 @@ void WCRootData::FillTree()
     for(unsigned int i=0; i<fSpEvt.size(); i++)
     {
         fSpEvt[i]->ReInitialize();
+    }
+    if (fSaveWF) 
+    {
+        fWCSimDigiWFT->Fill();
+        for(unsigned int i=0; i<fDigiWF.size(); i++)
+        {
+            fDigiWF[i]->Clear();
+        }
     }
 }
 
@@ -415,6 +487,11 @@ void WCRootData::WriteTree()
     TFile *f = fWCSimT->GetCurrentFile();
     f->cd();
     fWCSimT->Write();
+    if (fSaveWF) 
+    {
+        fWCSimDigiWFT->Write();
+        fWCSimDigiPulls->Write();
+    }
     f->Close();
 }
 

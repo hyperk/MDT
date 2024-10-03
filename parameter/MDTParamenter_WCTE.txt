@@ -24,6 +24,8 @@
 # 3" PMT setting
 < ScalFactorTTS_PMT3inchR14374_WCTE = 1 >
 < SPECDFFile_PMT3inchR14374_WCTE = $MDTROOT/parameter/SPE_CDF_PMT3inchR14374_WCTE.txt >
+< PMTDE_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_DE_WCTE.txt > # txt file of PMT by PMT (quantum) detection efficiency
+< PMTTime_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_Timing_WCTE.txt > # txt file of PMT by PMT timing offset
 
 # Digitizer setting
 < DigiHitIntegrationWindow = 200 >  // ns
@@ -37,3 +39,15 @@
 # Output setting
 < TimeOffset = 950. >
 < FlagMultDigits = 0 >
+
+# Choice of digitizer
+< DigitizerType_PMT3inchR14374_WCTE = 0 > # 0 = default WCSim digitizer, 1 = mPMT digitizer
+
+# mPMT digitizer setting
+< WaveformFile = $MDTROOT/parameter/LC-gauss.txt >
+< SamplingInterval = 8 > # ns
+< SamplingResolution = 1 > #mV
+< WaveformOffset = 95 > # ns
+< SigmaGuess = 6 > # ns, initial guess of pulse width
+< ADCToPE = 108 > # empirical conversion from adc to pe
+< SaveWaveform = 1 > # Save the digitized waveform in output

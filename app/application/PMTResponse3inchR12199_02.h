@@ -9,5 +9,27 @@ class PMTResponse3inchR12199_02 : public GenericPMTResponse
         PMTResponse3inchR12199_02();
         virtual ~PMTResponse3inchR12199_02();
         float HitTimeSmearing(float);
+        float HitTimeSmearing(float, int);
+        void Initialize(int, const string &s="");
+        bool ApplyDE(const TrueHit* th=NULL, const HitTube* ht=NULL);
+
+    private:
+        string fPMTDEFile;
+        int fLoadDE;
+        std::vector<double> fDE;
+        void LoadPMTDE(const string &s);
+        string fPMTTFile;
+        int fLoadT;
+        std::vector<double> fT;
+        void LoadPMTTime(const string &s);
+};
+
+class PMTResponse3inchR14374 : public GenericPMTResponse
+{
+    public: 
+        PMTResponse3inchR14374(int, const string &s="");
+        PMTResponse3inchR14374();
+        virtual ~PMTResponse3inchR14374();
+        float HitTimeSmearing(float);
         void Initialize(int, const string &s="");
 };

@@ -37,8 +37,7 @@ class MDTManager
         PMTResponse* GetPMTResponse(const string &s="Def") { return fPMTResp[s]; }
 
     private:
-        // TriggerAlgo *fTrigAlgo;
-        HitDigitizer *fDgtzr;
+        map<string, HitDigitizer*> fDgtzr;
         MTRandom *fRndm;
 
         map<string, TriggerAlgo*> fTrigAlgo;

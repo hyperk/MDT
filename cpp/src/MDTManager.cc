@@ -3,9 +3,8 @@
 MDTManager::MDTManager(int seed)
 {
     fRndm = new MTRandom( seed );
-    // fTrigAlgo = new TriggerAlgo();
-    fDgtzr = new HitDigitizer( fRndm->Integer(1000000) );
-
+    
+    fDgtzr.clear();
     fTrigAlgo.clear();
     fPMTResp.clear();
     fDark.clear();
@@ -18,10 +17,18 @@ MDTManager::~MDTManager()
     // if( fTrigAlgo ){ delete fTrigAlgo; fTrigAlgo = NULL; }
     if( fRndm ){ delete fRndm; fRndm = NULL; }
 
+    map<string, HitDigitizer*>::iterator iDgtzr;
+    for(iDgtzr=fDgtzr.begin(); iDgtzr!=fDgtzr.end(); iDgtzr++)
+    {
+        std::cout<<" Deleting" << iDgtzr->first <<std::endl;
+        delete iDgtzr->second; iDgtzr->second = NULL;
+    }
+    fDgtzr.clear();
+
     map<string, PMTResponse*>::iterator iPMTResp;
     for(iPMTResp=fPMTResp.begin(); iPMTResp!=fPMTResp.end(); iPMTResp++)
     {
-        std::cout<<" Deleting" << iPMTResp->first <<std::endl;
+        //std::cout<<" Deleting" << iPMTResp->first <<std::endl;
         delete iPMTResp->second; iPMTResp->second = NULL;
     }
     fPMTResp.clear();
@@ -67,7 +74,7 @@ void MDTManager::DoDigitize(const string &pmtname)
 {
     if( this->HasThisPMTType(pmtname) )
     {
-        fDgtzr->Digitize(fPHC[pmtname], fPMTResp[pmtname]);
+        fDgtzr[pmtname]->Digitize(fPHC[pmtname], fPMTResp[pmtname]);
         //cout<<" # true hits: " << fPHC[pmtname]->GetTotalNumOfTrueHits()
 		//	<<" # digitized hits: " << fPHC[pmtname]->GetTotalNumOfDigiHits()
 		//	<<endl;
@@ -86,7 +93,7 @@ void MDTManager::DoAddAfterpulse(const string &pmtname)
 {
     if( this->HasThisPMTType(pmtname) )
     {
-        fDark[pmtname]->AddAfterpulse(fPHC[pmtname], fDgtzr, fPMTResp[pmtname]);
+        fDark[pmtname]->AddAfterpulse(fPHC[pmtname], fDgtzr[pmtname], fPMTResp[pmtname]);
     }
 }
 
@@ -118,6 +125,21 @@ void MDTManager::RegisterPMTType(const string &pmtname, PMTResponse *pmtResp)
 {
     if( fPHC.count(pmtname)==0 )
     {
+        Configuration *Conf = Configuration::GetInstance();
+        int DigitizerType = 0;
+        string s = "DigitizerType_"+pmtname;
+        Conf->GetValue<int>(s, DigitizerType);
+        switch (DigitizerType)
+        {
+            case 1:
+                fDgtzr[pmtname] = new HitDigitizer_mPMT( fRndm->Integer(1000000) );
+                cout << "Use mPMT digitizer for "<<pmtname<<endl;
+                break;
+            default:
+                fDgtzr[pmtname] = new HitDigitizer( fRndm->Integer(1000000) );
+                cout << "Use default digitizer for "<<pmtname<<endl;
+        }
+
         fTrigAlgo[pmtname] = new TriggerAlgo(pmtname) ;
         fTrigInfo[pmtname] = new TriggerInfo();
         fPHC[pmtname] = new HitTubeCollection();

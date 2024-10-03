@@ -53,3 +53,20 @@ Input variables are:
 - `IDNuIntRate`,`BeamBkgRate`: Mean number of ID and background events per spill. In each spill, the actual number of interactions are drawn from a Poisson distribution, and interaction timing according to the bunch structure (see `BeamTiming` class under `app/utilities/WCRootData/`)
 - `UseOD`: Process OD hits
 - `NumOfSpillsSavedPerFile`, `TotalNumOfSpills`: output spill setup
+
+## How to simulate and access digitized pulses
+For each true hit, a digitized waveform is simulated by sampling the single PE pulse (defined by the `<WaveformFile>` parameter) every 8 ns with 1 mV resolution. If there is another PE arriving within the same pulse window, the waveforms are added. 
+
+To do pulse fitting, the peak of each pulse is found, then a Gaussian fit is done and the fitted parameters are used to calculate the digitized time and charge.
+
+The waveform of the first pulse of each PMT in each event is saved in `TClonesArray`. To read the pulses,
+```
+// open the file and get the digitzed waveform tree
+TTree* wcsimDigiWFTree = (TTree*)f->Get("wcsimDigiWFTree");
+TClonesArray *arr = new TClonesArray("TH1F");
+wcsimDigiWFTree->GetBranch("wcsimrootevent_waveform")->SetAutoDelete(kFALSE);
+wcsimDigiWFTree->SetBranchAddress("wcsimrootevent_waveform",&arr);
+// In each event, each array index corresponds to PMT id (from 0 to nPMTs-1)
+wcsimDigiWFTree->GetEntry(0); // event id
+TH1F* h = (TH1F*)arr->At(0); // PMT id
+```
