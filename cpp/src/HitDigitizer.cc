@@ -266,9 +266,12 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
                     }
 
                     aHT->AddDigiHit(digiT, digiQ, parent_composition);
-                    if (!aHT->GetDigiWF()) aHT->SetDigiWF(hWT);
-                    aHT->SetDigiPulls(digiT-trueT,digiQ-parent_composition.size());
-                    aHT->SetTrueTQ(trueT,parent_composition.size());
+                    if (!aHT->GetDigiWF()) 
+                    {
+                        aHT->SetDigiWF(hWT);
+                        aHT->SetDigiPulls(digiT-trueT,digiQ-parent_composition.size());
+                        aHT->SetTrueTQ(trueT,parent_composition.size());
+                    }
                 }
 
                 parent_composition.clear(); 
@@ -310,9 +313,12 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
             }
 
             aHT->AddDigiHit(digiT, digiQ, parent_composition);
-            if (!aHT->GetDigiWF()) aHT->SetDigiWF(hWT);
-            aHT->SetDigiPulls(digiT-trueT,digiQ-parent_composition.size());
-            aHT->SetTrueTQ(trueT,parent_composition.size());
+            if (!aHT->GetDigiWF()) 
+            {   
+                aHT->SetDigiWF(hWT);
+                aHT->SetDigiPulls(digiT-trueT,digiQ-parent_composition.size());
+                aHT->SetTrueTQ(trueT,parent_composition.size());
+            }
         }
 
         parent_composition.clear(); 
