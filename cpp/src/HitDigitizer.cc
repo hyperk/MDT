@@ -215,11 +215,9 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
     const int NPE = aHT->GetNRawPE();
     const vector<TrueHit*> PEs = aHT->GetPhotoElectrons();
 
-    // Taken from WCSimWCDigitizerSKI::DigitizeHits
-    double sumSPE = 0.;
     bool isAlive = false;
-    double digiT = 0.;
-    double digiQ = 0.;
+    vector<double> vDigiT;
+    vector<double> vDigiQ;
 
     double intgr_srt = (double)PEs[0]->GetTime();
     double intgr_end = intgr_srt+fIntegWindow;
@@ -232,10 +230,8 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
     {
         if( PEs[iPE]->GetTime()>=intgr_srt && PEs[iPE]->GetTime()<intgr_end )
         {
-            sumSPE += pr->GetRawSPE(PEs[iPE], aHT);
-            parent_composition.push_back( PEs[iPE]->GetParentId() );
             digiPEs.push_back(PEs[iPE]);
-            //intgr_end = PEs[iPE]->GetTime()+fIntegWindow;
+            intgr_end = PEs[iPE]->GetTime()+fIntegWindow;
         }
         else
         {
@@ -243,53 +239,90 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
             if (digiPEs.size()==0) return;
 
             TH1F hWT = BuildWavetrain(digiPEs, fIntegWindow);
-            this->FitWavetrain(hWT,digiT,digiQ);
-            digiT += pr->HitTimeSmearing(digiQ,aHT->GetTubeID());
+            this->FitWavetrain(hWT,vDigiT,vDigiQ);
 
-            isAlive = true;
-            if (fApplyEff ){ this->ApplyThreshold(digiQ, isAlive); }
-            if( isAlive ) 
+            int nHits = vDigiT.size();
+            for (int i=0;i<nHits;i++)
             {
-                digiQ *= fEfficiency;
-                digiQ = this->DoTruncate(digiQ, fPrecisionCharge);
-                digiT = this->DoTruncate(digiT, fPrecisionTiming);
-                aHT->AddDigiHit(digiT, digiQ, parent_composition);
-                if (!aHT->GetDigiWF()) aHT->SetDigiWF(hWT);
-                aHT->SetDigiPulls(digiT-digiPEs.front()->GetTime(),digiQ-digiPEs.size());
-                aHT->SetTrueTQ(digiPEs.front()->GetTime(),digiPEs.size());
+                double digiQ = vDigiQ[i];
+                double digiT = vDigiT[i] + pr->HitTimeSmearing(digiQ,aHT->GetTubeID()); // tabulated timing offset
+
+                isAlive = true;
+                if (fApplyEff ){ this->ApplyThreshold(digiQ, isAlive); }
+                if( isAlive ) 
+                {
+                    digiQ *= fEfficiency;
+                    digiQ = this->DoTruncate(digiQ, fPrecisionCharge);
+                    digiT = this->DoTruncate(digiT, fPrecisionTiming);
+
+                    double trueT = vDigiT[i] - 3*fDt;
+                    for (auto pe :digiPEs )
+                    {
+                        if ( pe->GetTime()>vDigiT[i]-2*fDt && pe->GetTime()<vDigiT[i]+5*fDt ) // charge integration window
+                        {
+                            parent_composition.push_back(pe->GetParentId());
+                            if (trueT<vDigiT[i]-2*fDt) trueT = pe->GetTime();
+                        }
+                    }
+
+                    aHT->AddDigiHit(digiT, digiQ, parent_composition);
+                    if (!aHT->GetDigiWF()) aHT->SetDigiWF(hWT);
+                    aHT->SetDigiPulls(digiT-trueT,digiQ-parent_composition.size());
+                    aHT->SetTrueTQ(trueT,parent_composition.size());
+                }
+
+                parent_composition.clear(); 
             }
+
             digiPEs.clear();
-            sumSPE = 0.;
-            parent_composition.clear(); 
 
             intgr_srt = PEs[iPE]->GetTime();
             intgr_end = intgr_srt+fIntegWindow;
-            sumSPE += pr->GetRawSPE(PEs[iPE], aHT);
-            parent_composition.push_back( PEs[iPE]->GetParentId() );
             digiPEs.push_back(PEs[iPE]);
         }
     }
 
     TH1F hWT = BuildWavetrain(digiPEs, fIntegWindow);
-    this->FitWavetrain(hWT,digiT,digiQ);
-    digiT += pr->HitTimeSmearing(digiQ,aHT->GetTubeID());
-    isAlive = true;
-    if (fApplyEff ){ this->ApplyThreshold(digiQ, isAlive); }
-    if( isAlive )
+    this->FitWavetrain(hWT,vDigiT,vDigiQ);
+
+    int nHits = vDigiT.size();
+    for (int i=0;i<nHits;i++)
     {
-        digiQ *= fEfficiency;
-        digiQ = this->DoTruncate(digiQ, fPrecisionCharge);
-        digiT = this->DoTruncate(digiT, fPrecisionTiming);
-        aHT->AddDigiHit(digiT, digiQ, parent_composition);
-        if (!aHT->GetDigiWF()) aHT->SetDigiWF(hWT);
-        aHT->SetDigiPulls(digiT-digiPEs.front()->GetTime(),digiQ-digiPEs.size());
-        aHT->SetTrueTQ(digiPEs.front()->GetTime(),digiPEs.size());
+        double digiQ = vDigiQ[i];
+        double digiT = vDigiT[i] + pr->HitTimeSmearing(digiQ,aHT->GetTubeID()); // tabulated timing offset
+
+        isAlive = true;
+        if (fApplyEff ){ this->ApplyThreshold(digiQ, isAlive); }
+        if( isAlive ) 
+        {
+            digiQ *= fEfficiency;
+            digiQ = this->DoTruncate(digiQ, fPrecisionCharge);
+            digiT = this->DoTruncate(digiT, fPrecisionTiming);
+
+            double trueT = vDigiT[i] - 3*fDt;
+            for (auto pe :digiPEs )
+            {
+                if ( pe->GetTime()>vDigiT[i]-2*fDt && pe->GetTime()<vDigiT[i]+5*fDt ) // charge integration window
+                {
+                    parent_composition.push_back(pe->GetParentId());
+                    if (trueT<vDigiT[i]-2*fDt) trueT = pe->GetTime();
+                }
+            }
+
+            aHT->AddDigiHit(digiT, digiQ, parent_composition);
+            if (!aHT->GetDigiWF()) aHT->SetDigiWF(hWT);
+            aHT->SetDigiPulls(digiT-trueT,digiQ-parent_composition.size());
+            aHT->SetTrueTQ(trueT,parent_composition.size());
+        }
+
+        parent_composition.clear(); 
     }
 }
 
 TH1F HitDigitizer_mPMT::BuildWavetrain(const vector<TrueHit*> PEs, double waveform_window)
 {
-    double dt = fDt; // interval, start, end of sampling
+    // interval, start, end of sampling
+    double dt = fDt; 
     double tmin = floor((PEs.front()->GetTime())/dt)*dt;
     double tmax = ceil((PEs.back()->GetTime()+waveform_window)/dt)*dt; 
     TH1F hWT("","",(int)(tmax-tmin)/dt,tmin,tmax);
@@ -322,29 +355,50 @@ TH1F HitDigitizer_mPMT::BuildWavetrain(const vector<TrueHit*> PEs, double wavefo
     return hWT;
 }
 
-void HitDigitizer_mPMT::FitWavetrain(TH1F hist, double& digiT, double& digiQ)
+void HitDigitizer_mPMT::FitWavetrain(TH1F hist, vector<double>& vDigiT, vector<double>& vDigiQ)
 {
     double dt = fDt; 
-    int maxBin = hist.GetMaximumBin();
-    double digiT_guess = hist.GetBinCenter(maxBin);
-    double digiQ_guess = hist.GetBinContent(maxBin);
-    double sigma_guess = fSigmaGuess;
-    double range_min = hist.GetBinLowEdge(maxBin);
-    double range_max = hist.GetBinLowEdge(maxBin+1);
-    double adc_to_pe = fADCToPE;
-    for (int i=maxBin-1;i>=1;i--)
+
+    vDigiT.clear();
+    vDigiQ.clear();
+
+    int hit_insensitivity_period = 8;
+    double amplitude_threshold = 20;
+
+    // Hit finding algorithm from https://github.com/hyperk/MDT/issues/8
+    for (int i=3;i<=hist.GetNbinsX()-2;i++)
     {
-        if (hist.GetBinContent(i)>0) range_min = hist.GetBinLowEdge(i);
-        else break;
+        // Amplitude exceeding the threshold
+        if (hist.GetBinContent(i)<amplitude_threshold) continue;
+        // Local maximum
+        if (hist.GetBinContent(i)<hist.GetBinContent(i-1)) continue;
+        if (hist.GetBinContent(i)<=hist.GetBinContent(i+1)) continue;
+        if (hist.GetBinContent(i)<=hist.GetBinContent(i-2)) continue;
+        if (hist.GetBinContent(i)<=hist.GetBinContent(i+2)) continue;
+        // Integral of 7 samples (preceding and following) exceeds 2x threshold
+        int start = i-2;
+        int end = i+4 <= hist.GetNbinsX() ? i+4 : hist.GetNbinsX();
+        double integral = 0;
+        for (int j=start;j<=end;j++) integral+=hist.GetBinContent(j);
+        if (integral<amplitude_threshold*2) continue;
+        // Charge is estimated as the sum of eight samples around the maximum.
+        // 5 before and 2 after. The last sample is discarded if negative.
+        start = i-5 >= 1 ? i-5 : 1;
+        end = hist.GetBinContent(i+2) > 0 ? i+2 : i+1 ;
+        double charge = 0;
+        for (int j=start;j<=end;j++) charge+=hist.GetBinContent(j);
+        // Time is estimated using Constant Fraction Discriminator (CFD)
+        // the negated pulse is delayed by one cycle and added to the original pulse
+        // Linear interpolation to calculate zero-crossing time
+        double val1 = hist.GetBinContent(i) - hist.GetBinContent(i-1); 
+        double val2 = hist.GetBinContent(i+1) - hist.GetBinContent(i);
+        double time = hist.GetBinLowEdge(i) + dt*val1/(val1-val2);
+
+        vDigiT.push_back(time-3.775*dt); // offset to get back to true time
+        vDigiQ.push_back(charge/fADCToPE); // scale to get 1 photon ~ 1 unit of charge 
+
+        // Sufficient period from the previous pulse
+        i += hit_insensitivity_period;
+
     }
-    for (int i=maxBin+1;i<=hist.GetNbinsX();i++)
-    {
-        if (hist.GetBinContent(i)>0) range_max = hist.GetBinLowEdge(i+1);
-        else break;
-    }
-    TF1 f1("f1", "gaus", range_min,range_max);
-    f1.SetParameters(digiQ_guess,digiT_guess,sigma_guess);
-    TFitResultPtr r = hist.Fit("f1","S Q N","",range_min,range_max);
-    digiQ = r->Parameter(0)*r->Parameter(2)/adc_to_pe;
-    digiT = r->Parameter(1) - 3*r->Parameter(2) - dt;
 }
