@@ -151,17 +151,29 @@ HitDigitizer_mPMT::HitDigitizer_mPMT(int seed) : HitDigitizer(seed)
 {
     hWF = nullptr;
     fDt = 8;
-    fDv = 1;
-    fWaveformOffset = 95;
-    fADCToPE = 108;
-    fSigmaGuess = 6;
+    fDv = 0.1;
+    fWaveformOffset = 0;
+    fADCToPE = 4627;
+    fIntegralPreceding = 2;
+    fIntegralFollowing = 4;
+    fChargeWindowBefore = 5;
+    fChargeWindowAfter  = 2;
+    fDigiTimeOffset = -30.1;
+    fHitInsensitivityPeriod = 8;
+    fAmplitudeThreshold = 20.;
 
     Configuration *Conf = Configuration::GetInstance();
     Conf->GetValue<float>("SamplingInterval", fDt);
     Conf->GetValue<float>("SamplingResolution", fDv);
     Conf->GetValue<float>("WaveformOffset", fWaveformOffset);
     Conf->GetValue<float>("ADCToPE", fADCToPE);
-    Conf->GetValue<float>("SigmaGuess", fSigmaGuess);
+    Conf->GetValue<float>("DigiTimeOffset", fDigiTimeOffset);
+    Conf->GetValue<float>("AmplitudeThreshold", fAmplitudeThreshold);
+    Conf->GetValue<int>("IntegralPreceding", fIntegralPreceding);
+    Conf->GetValue<int>("IntegralFollowing", fIntegralFollowing);
+    Conf->GetValue<int>("ChargeWindowBefore", fChargeWindowBefore);
+    Conf->GetValue<int>("ChargeWindowAfter", fChargeWindowAfter);
+    Conf->GetValue<int>("HitInsensitivityPeriod", fHitInsensitivityPeriod);
 
     this->LoadWaveform(Conf->GetValue<string>("WaveformFile"));
 }
@@ -258,10 +270,10 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
                     double trueT = vDigiT[i] - 3*fDt;
                     for (auto pe :digiPEs )
                     {
-                        if ( pe->GetTime()>vDigiT[i]-2*fDt && pe->GetTime()<vDigiT[i]+5*fDt ) // charge integration window
+                        if ( pe->GetTime()>vDigiT[i]-fDt && pe->GetTime()<vDigiT[i]+fHitInsensitivityPeriod*fDt ) // include dead time window
                         {
                             parent_composition.push_back(pe->GetParentId());
-                            if (trueT<vDigiT[i]-2*fDt) trueT = pe->GetTime();
+                            if (trueT<vDigiT[i]-fDt) trueT = pe->GetTime();
                         }
                     }
 
@@ -305,10 +317,10 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
             double trueT = vDigiT[i] - 3*fDt;
             for (auto pe :digiPEs )
             {
-                if ( pe->GetTime()>vDigiT[i]-2*fDt && pe->GetTime()<vDigiT[i]+5*fDt ) // charge integration window
+                if ( pe->GetTime()>vDigiT[i]-fDt && pe->GetTime()<vDigiT[i]+fHitInsensitivityPeriod*fDt ) // include dead time window
                 {
                     parent_composition.push_back(pe->GetParentId());
-                    if (trueT<vDigiT[i]-2*fDt) trueT = pe->GetTime();
+                    if (trueT<vDigiT[i]-fDt) trueT = pe->GetTime();
                 }
             }
 
@@ -368,29 +380,27 @@ void HitDigitizer_mPMT::FitWavetrain(TH1F hist, vector<double>& vDigiT, vector<d
     vDigiT.clear();
     vDigiQ.clear();
 
-    int hit_insensitivity_period = 8;
-    double amplitude_threshold = 20;
-
     // Hit finding algorithm from https://github.com/hyperk/MDT/issues/8
     for (int i=3;i<=hist.GetNbinsX()-2;i++)
     {
         // Amplitude exceeding the threshold
-        if (hist.GetBinContent(i)<amplitude_threshold) continue;
+        if (hist.GetBinContent(i)<fAmplitudeThreshold) continue;
         // Local maximum
         if (hist.GetBinContent(i)<hist.GetBinContent(i-1)) continue;
         if (hist.GetBinContent(i)<=hist.GetBinContent(i+1)) continue;
         if (hist.GetBinContent(i)<=hist.GetBinContent(i-2)) continue;
         if (hist.GetBinContent(i)<=hist.GetBinContent(i+2)) continue;
         // Integral of 7 samples (preceding and following) exceeds 2x threshold
-        int start = i-2;
-        int end = i+4 <= hist.GetNbinsX() ? i+4 : hist.GetNbinsX();
+        int start = i-fIntegralPreceding >=1 ? i-fIntegralPreceding : 1;
+        int end = i+fIntegralFollowing <= hist.GetNbinsX() ? i+fIntegralFollowing : hist.GetNbinsX();
         double integral = 0;
         for (int j=start;j<=end;j++) integral+=hist.GetBinContent(j);
-        if (integral<amplitude_threshold*2) continue;
+        if (integral<fAmplitudeThreshold*2) continue;
         // Charge is estimated as the sum of eight samples around the maximum.
         // 5 before and 2 after. The last sample is discarded if negative.
-        start = i-5 >= 1 ? i-5 : 1;
-        end = hist.GetBinContent(i+2) > 0 ? i+2 : i+1 ;
+        start = i-fChargeWindowBefore >= 1 ? i-fChargeWindowBefore : 1;
+        end = i+fChargeWindowAfter > hist.GetNbinsX() ? hist.GetNbinsX() :
+                                                        hist.GetBinContent(i+fChargeWindowAfter) > 0 ? i+fChargeWindowAfter : i+fChargeWindowAfter-1 ;
         double charge = 0;
         for (int j=start;j<=end;j++) charge+=hist.GetBinContent(j);
         // Time is estimated using Constant Fraction Discriminator (CFD)
@@ -400,11 +410,11 @@ void HitDigitizer_mPMT::FitWavetrain(TH1F hist, vector<double>& vDigiT, vector<d
         double val2 = hist.GetBinContent(i+1) - hist.GetBinContent(i);
         double time = hist.GetBinLowEdge(i) + dt*val1/(val1-val2);
 
-        vDigiT.push_back(time-3.775*dt); // offset to get back to true time
+        vDigiT.push_back(time+fDigiTimeOffset); // offset to get back to photon detection time
         vDigiQ.push_back(charge/fADCToPE); // scale to get 1 photon ~ 1 unit of charge 
 
         // Sufficient period from the previous pulse
-        i += hit_insensitivity_period;
+        i += fHitInsensitivityPeriod;
 
     }
 }

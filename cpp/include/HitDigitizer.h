@@ -50,5 +50,11 @@ class HitDigitizer_mPMT : public HitDigitizer
         float fDv;
         float fWaveformOffset;
         float fADCToPE;
-        float fSigmaGuess;
+        int fIntegralPreceding;
+        int fIntegralFollowing;
+        int fChargeWindowBefore;
+        int fChargeWindowAfter;
+        float fDigiTimeOffset;
+        int fHitInsensitivityPeriod;
+        float fAmplitudeThreshold;
 };

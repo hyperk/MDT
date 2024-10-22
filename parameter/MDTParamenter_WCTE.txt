@@ -22,8 +22,6 @@
 < DarkRate_PMT3inchR14374_WCTE = 0.0 >
 
 # 3" PMT setting
-< ScalFactorTTS_PMT3inchR14374_WCTE = 1 >
-< SPECDFFile_PMT3inchR14374_WCTE = $MDTROOT/parameter/SPE_CDF_PMT3inchR14374_WCTE.txt >
 # < PMTDE_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_DE_WCTE.txt > # txt file of PMT by PMT (quantum) detection efficiency
 # < PMTTime_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_Timing_WCTE.txt > # txt file of PMT by PMT timing offset, only used in Waveform digitizer
 
@@ -43,11 +41,21 @@
 # Choice of digitizer
 < DigitizerType_PMT3inchR14374_WCTE = 1 > # 0 = default WCSim digitizer, 1 = Waveform digitizer
 
+# TQ response used in default WCSim digitizer
+< ScalFactorTTS_PMT3inchR14374_WCTE = 1 >
+< SPECDFFile_PMT3inchR14374_WCTE = $MDTROOT/parameter/SPE_CDF_PMT3inchR14374_WCTE.txt >
+
 # Waveform digitizer setting
-< WaveformFile = $MDTROOT/parameter/pmt_sig_ref_phot_fft_iterp_1.txt >
-< SamplingInterval = 8 > # ns
-< SamplingResolution = 0.1 > #mV
+< WaveformFile = $MDTROOT/parameter/pmt_sig_ref_phot_fft_iterp_1.txt > # 1PE pulse
 < WaveformOffset = 0 > # ns
-< SigmaGuess = 6 > # ns, initial guess of pulse width
-< ADCToPE = 4627 > # empirical conversion from adc to pe
+< SamplingInterval = 8 > # ns
+< SamplingResolution = 0.1 >
+< AmplitudeThreshold = 20 > # self-trigger threshold
+< IntegralPreceding = 2 >  # self-trigger integral
+< IntegralFollowing = 4 > 
+< HitInsensitivityPeriod = 8 > # Dead time period
+< ChargeWindowBefore = 5 > # charge integration period
+< ChargeWindowAfter = 2 >
+< ADCToPE = 4627 > # empirical conversion from adc to digi Q
+< DigiTimeOffset = -30.1 > # ns, correction to digi T
 < SaveWaveform = 1 > # Save the digitized waveform in output
