@@ -170,7 +170,7 @@ void GenericPMTResponse::LoadPMTDE(const string &filename)
     {
         cout<<" GenericPMTResponse::LoadPMTDE" <<endl;
         cout<<"  - No PMT QE file: " << filename <<endl;
-        cout<<"  - Do not apply DE " << endl;
+        cout<<"  - Do not apply individual PMT DE " << endl;
     }
     string aLine;
     while( std::getline(ifs, aLine) )

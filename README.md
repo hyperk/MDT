@@ -57,18 +57,21 @@ Input variables are:
 ## How to simulate and access digitized pulses
 Turn on waveform simulation in the parameter file by `< DigitizerType_PMTType = 1 >`.
 
-For each true hit, a digitized waveform is simulated by sampling the single PE pulse (defined by the `< WaveformFile >` parameter) every 8 ns with 1 mV resolution. If there is another PE arriving within the hit integration window, the waveforms are added. 
+For each true hit, a digitized waveform is simulated by sampling the single PE pulse (defined by the `< WaveformFile >` parameter) every 8 ns with 0.1 resolution. If there is another PE arriving within the hit integration window, the waveforms are added. 
 
-To do pulse fitting, the peak of each pulse is found, then a Gaussian fit is done and the fitted parameters are used to calculate the digitized time and charge.
+To do pulse fitting, the hit finding algorithm [here](https://github.com/hyperk/MDT/issues/8) is implemented to calculate the digitized time and charge.
 
-Optionally, the waveform of the first pulse of each PMT in each event can be saved by setting `< SaveWaveform = 1 >`. To read the pulses,
+Optionally, the waveform and digi TQ pulls of the first pulse of each PMT in each event can be saved by setting `< SaveWaveform = 1 >`. To read the pulses,
 ```
 // open the file and get the digitzed waveform tree
 TTree* wcsimDigiWFTree = (TTree*)f->Get("wcsimDigiWFTree");
 TClonesArray *arr = new TClonesArray("TH1F");
 wcsimDigiWFTree->GetBranch("wcsimrootevent_waveform")->SetAutoDelete(kFALSE);
 wcsimDigiWFTree->SetBranchAddress("wcsimrootevent_waveform",&arr);
-// In each event, each array index corresponds to PMT id (from 0 to nPMTs-1)
-wcsimDigiWFTree->GetEntry(0); // event id
-TH1F* h = (TH1F*)arr->At(0); // PMT id
+// In each event, each array index corresponds to PMTId-1 (from 0 to nPMTs-1)
+wcsimDigiWFTree->GetEntry(0); // EvtId
+TH1F* h = (TH1F*)arr->At(0); // PMTId-1
+// Time and charge pulls of digitized hits
+TTree* WCSimDigiPulls = (TTree*)f->Get("WCSimDigiPulls");
+WCSimDigiPulls->Scan("PullT:TrueT:PullQ:TrueQ:EvtId:PMTId","PullT>-99"); // Pull==-99 means no digi hit for this PMT in this event
 ```
