@@ -31,6 +31,8 @@ WCRootData::WCRootData()
     fPullT = -99.;
     fTrueQ = -99.;
     fTrueT = -99.;
+    fEvtId = -99;
+    fPMTId = -99;
 }
 
 WCRootData::~WCRootData()
@@ -215,6 +217,8 @@ void WCRootData::CreateTree(const char *filename, const vector<string> &list)
             fWCSimDigiPulls->Branch("PullT",&fPullT);
             fWCSimDigiPulls->Branch("TrueQ",&fTrueQ);
             fWCSimDigiPulls->Branch("TrueT",&fTrueT);
+            fWCSimDigiPulls->Branch("EvtId",&fEvtId);
+            fWCSimDigiPulls->Branch("PMTId",&fPMTId);
         }
     }
 
@@ -392,6 +396,8 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
             fPullT = aPH->GetPullT();
             fTrueQ = aPH->GetTrueQ();
             fTrueT = aPH->GetTrueT();
+            fEvtId = eventID;
+            fPMTId = aPH->GetTubeID();
             fWCSimDigiPulls->Fill();
 
             aPH = NULL;

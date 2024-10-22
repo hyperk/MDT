@@ -81,6 +81,8 @@ class WCRootData
         float fPullT;
         float fTrueQ;
         float fTrueT;
+        int fEvtId;
+        int fPMTId;
 
     private:
 		void SetTubes(HitTubeCollection*, const int);
