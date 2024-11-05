@@ -41,11 +41,13 @@ class HitDigitizer_mPMT : public HitDigitizer
         virtual ~HitDigitizer_mPMT();
         void LoadWaveform(const string &filename);
         void DigitizeTube(HitTube*, PMTResponse*);
+        void ApplyThreshold(double&, bool&);
         TH1F BuildWavetrain(const vector<TrueHit*> PEs, double waveform_window);
         void FitWavetrain(TH1F hist, vector<double>& vDigiT, vector<double>& vDigiQ);
 
     private:
         TH1F* hWF;
+        float fAmplitudeSigma;
         float fDt;
         float fDv;
         float fWaveformOffset;

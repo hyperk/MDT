@@ -46,11 +46,12 @@
 < SPECDFFile_PMT3inchR14374_WCTE = $MDTROOT/parameter/SPE_CDF_PMT3inchR14374_WCTE.txt >
 
 # Waveform digitizer setting
-< WaveformFile = $MDTROOT/parameter/pmt_sig_ref_phot_fft_iterp_1.txt > # 1PE pulse
+< WaveformFile = $MDTROOT/parameter/pmt_sig_ref_phot_fft_iterp_1.txt > # 1PE pulse waveform (amplitude = 2048)
+< AmplitudeSigma = 0.37 > # 1PE amplitude sigma in fraction
 < WaveformOffset = 0 > # ns
 < SamplingInterval = 8 > # ns
 < SamplingResolution = 0.1 >
-< AmplitudeThreshold = 20 > # self-trigger threshold
+< AmplitudeThreshold = 683 > # self-trigger threshold (1/3 PE)
 < IntegralPreceding = 2 >  # self-trigger integral
 < IntegralFollowing = 4 > 
 < HitInsensitivityPeriod = 8 > # Dead time period

@@ -161,6 +161,7 @@ HitDigitizer_mPMT::HitDigitizer_mPMT(int seed) : HitDigitizer(seed)
     fDigiTimeOffset = -30.1;
     fHitInsensitivityPeriod = 8;
     fAmplitudeThreshold = 20.;
+    fAmplitudeSigma = 0.37;
 
     Configuration *Conf = Configuration::GetInstance();
     Conf->GetValue<float>("SamplingInterval", fDt);
@@ -176,6 +177,7 @@ HitDigitizer_mPMT::HitDigitizer_mPMT(int seed) : HitDigitizer(seed)
     Conf->GetValue<int>("HitInsensitivityPeriod", fHitInsensitivityPeriod);
 
     this->LoadWaveform(Conf->GetValue<string>("WaveformFile"));
+    Conf->GetValue<float>("AmplitudeSigma", fAmplitudeSigma);
 }
 
 HitDigitizer_mPMT::~HitDigitizer_mPMT()
@@ -354,11 +356,14 @@ TH1F HitDigitizer_mPMT::BuildWavetrain(const vector<TrueHit*> PEs, double wavefo
         int bin_start = hWT.FindBin(trueT);
         int bin_end = hWT.FindBin(trueT+waveform_window);
 
+        double norm = fRand->Gaus(1,fAmplitudeSigma);
+        while (norm<=0) norm = fRand->Gaus(1,fAmplitudeSigma);
+
         for (int iBin = bin_start; iBin<=bin_end; iBin++)
         {
             double adcT = hWT.GetBinLowEdge(iBin);
             double adcV = hWF->GetBinContent(hWF->FindBin(adcT-trueT+waveform_offset));
-            hWT.Fill(adcT+dt/2,adcV);
+            hWT.Fill(adcT+dt/2,norm*adcV);
         }
     }
 
@@ -417,4 +422,10 @@ void HitDigitizer_mPMT::FitWavetrain(TH1F hist, vector<double>& vDigiT, vector<d
         i += fHitInsensitivityPeriod;
 
     }
+}
+
+void HitDigitizer_mPMT::ApplyThreshold(double& pe, bool& pass)
+{
+    // Do nothing
+    pass=true;
 }
