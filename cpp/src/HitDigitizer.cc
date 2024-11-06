@@ -272,10 +272,10 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
                     double trueT = vDigiT[i] - 3*fDt;
                     for (auto pe :digiPEs )
                     {
-                        if ( pe->GetTime()>vDigiT[i]-fDt && pe->GetTime()<vDigiT[i]+fHitInsensitivityPeriod*fDt ) // include dead time window
+                        if ( pe->GetTime()>vDigiT[i]-3*fDt && pe->GetTime()<vDigiT[i]+fHitInsensitivityPeriod*fDt ) // include dead time window
                         {
                             parent_composition.push_back(pe->GetParentId());
-                            if (trueT<vDigiT[i]-fDt) trueT = pe->GetTime();
+                            if (parent_composition.size()==1) trueT = pe->GetTime();
                         }
                     }
 
@@ -319,10 +319,10 @@ void HitDigitizer_mPMT::DigitizeTube(HitTube *aHT, PMTResponse *pr)
             double trueT = vDigiT[i] - 3*fDt;
             for (auto pe :digiPEs )
             {
-                if ( pe->GetTime()>vDigiT[i]-fDt && pe->GetTime()<vDigiT[i]+fHitInsensitivityPeriod*fDt ) // include dead time window
+                if ( pe->GetTime()>vDigiT[i]-3*fDt && pe->GetTime()<vDigiT[i]+fHitInsensitivityPeriod*fDt ) // include dead time window
                 {
                     parent_composition.push_back(pe->GetParentId());
-                    if (trueT<vDigiT[i]-fDt) trueT = pe->GetTime();
+                    if (parent_composition.size()==1) trueT = pe->GetTime();
                 }
             }
 
