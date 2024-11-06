@@ -22,6 +22,8 @@
 #include "TrueHit.h"
 using std::vector;
 
+#include "TH1F.h"
+
 class HitTube
 {
     public: 
@@ -74,6 +76,22 @@ class HitTube
         float GetChargeDigi(const int i) const { return fChargeDigi[i]; }
         const vector<int>& GetParentCompositionDigi(const int i) const { return fParentCompDigi[i]; }
 
+        void SetDigiWF(const TH1F& hist)
+        {
+            if(hDigiWF != nullptr) delete hDigiWF;
+            hDigiWF = new TH1F(hist);
+            hDigiWF->SetDirectory(0);
+        }
+        TH1F* GetDigiWF()
+        {
+            return hDigiWF;
+        }
+        void SetDigiPulls(float pullT, float pullQ) { fPullT = pullT; fPullQ = pullQ;}
+        void SetTrueTQ(float trueT, float trueQ) { fTrueT = trueT; fTrueQ = trueQ;}
+        float GetPullT() {return fPullT;}
+        float GetPullQ() {return fPullQ;}
+        float GetTrueT() {return fTrueT;}
+        float GetTrueQ() {return fTrueQ;}
         
     private:
         int fNRawPE;
@@ -88,4 +106,10 @@ class HitTube
         vector<float> fTimeDigi;
         vector<float> fChargeDigi;
         vector<vector<int>> fParentCompDigi;
+
+        TH1F* hDigiWF;
+        float fPullT; 
+        float fPullQ;
+        float fTrueT; 
+        float fTrueQ;
 };

@@ -30,6 +30,8 @@ void PMTResponse3inchR12199_02::Initialize(int seed, const string &pmtname)
     s["TimingResMinimum"] = "TimingResMinimum"; 
     s["ScalFactorTTS"] = "ScalFactorTTS";
     s["SPECDFFile"] = "SPECDFFile";
+    s["PMTDE"] = "PMTDE";
+    s["PMTTime"] = "PMTTime";
     if( fPMTType!="" )
     {
         map<string, string>::iterator i;
@@ -43,7 +45,11 @@ void PMTResponse3inchR12199_02::Initialize(int seed, const string &pmtname)
     Conf->GetValue<float>(s["TimingResMinimum"], fTResMinimum);
     Conf->GetValue<float>(s["ScalFactorTTS"], fSclFacTTS);
     Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
+    Conf->GetValue<string>(s["PMTDE"], fPMTDEFile);
+    Conf->GetValue<string>(s["PMTTime"], fPMTTFile);
     this->LoadCDFOfSPE(fTxtFileSPECDF);
+    this->LoadPMTDE(fPMTDEFile);
+    this->LoadPMTTime(fPMTTFile);
 }
 
 float PMTResponse3inchR12199_02::HitTimeSmearing(float Q)
@@ -53,3 +59,6 @@ float PMTResponse3inchR12199_02::HitTimeSmearing(float Q)
     if( timingResolution<fTResMinimum ){ timingResolution = fTResMinimum; }
     return fRand->Gaus(0.0,timingResolution);
 }
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////

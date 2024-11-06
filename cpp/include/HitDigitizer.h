@@ -6,6 +6,8 @@
 #include "PMTResponse.h"
 #include "MTRandom.h"
 
+#include "TH1F.h"
+
 using std::cout;
 using std::endl;
 using std::vector;
@@ -15,13 +17,13 @@ class HitDigitizer
     public:
         HitDigitizer(int s=67823);
         virtual ~HitDigitizer();
-        void Digitize(HitTubeCollection*, PMTResponse*);
-        void DigitizeTube(HitTube*, PMTResponse*);
+        virtual void Digitize(HitTubeCollection*, PMTResponse*);
+        virtual void DigitizeTube(HitTube*, PMTResponse*);
 
-        void ApplyThreshold(double&, bool&);
-        double DoTruncate(const double, const double);
+        virtual void ApplyThreshold(double&, bool&);
+        virtual double DoTruncate(const double, const double);
 
-    private:
+    protected:
         float fPrecisionCharge;
         float fPrecisionTiming;
         float fEfficiency;
@@ -29,4 +31,32 @@ class HitDigitizer
         int fApplyEff;
     
         MTRandom *fRand;
+};
+
+// mPMT specific digitizer
+class HitDigitizer_mPMT : public HitDigitizer
+{
+    public:
+        HitDigitizer_mPMT(int s=67823);
+        virtual ~HitDigitizer_mPMT();
+        void LoadWaveform(const string &filename);
+        void DigitizeTube(HitTube*, PMTResponse*);
+        void ApplyThreshold(double&, bool&);
+        TH1F BuildWavetrain(const vector<TrueHit*> PEs, double waveform_window);
+        void FitWavetrain(TH1F hist, vector<double>& vDigiT, vector<double>& vDigiQ);
+
+    private:
+        TH1F* hWF;
+        float fAmplitudeSigma;
+        float fDt;
+        float fDv;
+        float fWaveformOffset;
+        float fADCToPE;
+        int fIntegralPreceding;
+        int fIntegralFollowing;
+        int fChargeWindowBefore;
+        int fChargeWindowAfter;
+        float fDigiTimeOffset;
+        int fHitInsensitivityPeriod;
+        float fAmplitudeThreshold;
 };

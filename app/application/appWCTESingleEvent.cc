@@ -42,12 +42,13 @@ int main(int argc, char **argv)
 	// WCTE will use single PMT type, so define the corresponding type of 3-inch PMT
     const int NPMTType = 1;
     string fPMTType[NPMTType];
-    fPMTType[0] = "PMT3inchR12199_02";
+    fPMTType[0] = "PMT3inchR14374_WCTE";
 
     MDTManager *MDT = new MDTManager(fSeed);
-    MDT->RegisterPMTType(fPMTType[0], new PMTResponse3inchR12199_02());
+    MDT->RegisterPMTType(fPMTType[0], new Response3inchR14374_WCTE());
 
     const vector<string> listWCRootEvt{"wcsimrootevent"};
+    const vector<string> listWCRootCopyTree{"wcsimGeoT","Settings","wcsimRootOptionsT"};
 
 	// WCRootData is an interface class between MDT and WCSim root file
     WCRootData *inData = new WCRootData();
@@ -85,6 +86,7 @@ int main(int argc, char **argv)
         MDT->DoInitialize();
     }
     outData->WriteTree();
+    for (auto s : listWCRootCopyTree) outData->CopyTree(fInFileName.c_str(),s.c_str());
     inData->CloseFile();
 }
 
