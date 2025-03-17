@@ -32,6 +32,7 @@ void PMTResponse3inchR12199_02::Initialize(int seed, const string &pmtname)
     s["SPECDFFile"] = "SPECDFFile";
     s["PMTDE"] = "PMTDE";
     s["PMTTime"] = "PMTTime";
+    s["AngularResponse"] = "AngularResponse";
     if( fPMTType!="" )
     {
         map<string, string>::iterator i;
@@ -47,9 +48,11 @@ void PMTResponse3inchR12199_02::Initialize(int seed, const string &pmtname)
     Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
     Conf->GetValue<string>(s["PMTDE"], fPMTDEFile);
     Conf->GetValue<string>(s["PMTTime"], fPMTTFile);
+    Conf->GetValue<string>(s["AngularResponse"], fARFile);
     this->LoadCDFOfSPE(fTxtFileSPECDF);
     this->LoadPMTDE(fPMTDEFile);
     this->LoadPMTTime(fPMTTFile);
+    this->LoadAngularResponse(fARFile);
 }
 
 float PMTResponse3inchR12199_02::HitTimeSmearing(float Q)

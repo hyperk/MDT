@@ -54,6 +54,10 @@ class GenericPMTResponse : public PMTResponse
         int fLoadT;
         std::vector<double> fT;
         string fPMTTFile;
+        void LoadAngularResponse(const string &s);
+        int fLoadAR;
+        std::vector<double> fAR;
+        string fARFile;
 
     //private:
     protected:
