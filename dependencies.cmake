@@ -1,2 +1,2 @@
 hk_package(ROOT *)
-hk_package(WCSim *) # 1.11.1 needed for hybrid WCSim
+hk_package(WCSim 1.12.21) # compatible version at development
