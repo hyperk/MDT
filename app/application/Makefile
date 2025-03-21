@@ -6,10 +6,10 @@ CXXFLAGS += -Wall -std=c++11 -g $(shell root-config --cflags)\
 			-I${MDTROOT}/cpp/include\
 			-I${WCRDROOT}/include
 
-LDFLAGS += $(shell root-config --ldflags) $(shell root-config --libs) -lTreePlayer\
+LDFLAGS += -L${MDTROOT}/cpp -lMDT\
+		   -L${WCRDROOT} -lWCRData\
 		   -L$(WCSIM_BUILD_DIR)/lib -lWCSimRoot\
-		   -L${MDTROOT}/cpp -lMDT\
-		   -L${WCRDROOT} -lWCRData
+		   $(shell root-config --ldflags) $(shell root-config --libs) -lTreePlayer
 
 .PHONY: clean Execs
 
