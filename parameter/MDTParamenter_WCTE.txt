@@ -39,11 +39,12 @@
 < FlagMultDigits = 1 >
 
 # Choice of digitizer
-< DigitizerType_PMT3inchR14374_WCTE = 1 > # 0 = default WCSim digitizer, 1 = Waveform digitizer
+< DigitizerType_PMT3inchR14374_WCTE = 0 > # 0 = default WCSim digitizer, 1 = Waveform digitizer
 
 # TQ response used in default WCSim digitizer
 < ScalFactorTTS_PMT3inchR14374_WCTE = 1 >
 < SPECDFFile_PMT3inchR14374_WCTE = $MDTROOT/parameter/SPE_CDF_PMT3inchR14374_WCTE.txt >
+< AngularResponse_PMT3inchR14374_WCTE = $MDTROOT/parameter/AngularResponse_PMT3inchR14374_WCTE.txt >
 
 # Waveform digitizer setting
 < WaveformFile = $MDTROOT/parameter/pmt_sig_ref_phot_fft_iterp_1.txt > # 1PE pulse waveform (amplitude = 2048)
