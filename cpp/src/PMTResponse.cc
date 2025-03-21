@@ -92,8 +92,11 @@ double GenericPMTResponse::GetRawSPE(const TrueHit* th, const HitTube* ht)
             cout<<"  -> EXIT" <<endl;
             exit(-1);
         }
-        double costh = -ht->GetOrientation(0)*th->GetDirection(0)-ht->GetOrientation(1)*th->GetDirection(1)-ht->GetOrientation(2)*th->GetDirection(2);
-        ar = 1 + (costh-0.5)*2*fAR[tubeID];
+        if (th->GetParentId()>=0)
+        {
+            double costh = -ht->GetOrientation(0)*th->GetDirection(0)-ht->GetOrientation(1)*th->GetDirection(1)-ht->GetOrientation(2)*th->GetDirection(2);
+            ar = 1 + (costh-0.5)*2*fAR[tubeID];
+        }
     }
     int i;
     double random1=fRand->Rndm();
