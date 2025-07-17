@@ -9,7 +9,7 @@
 < FailurePreTriggerWindow_PMT3inchR14374_WCTE = -400. >
 < FailureTime_PMT3inchR14374_WCTE = 100. >
 < NDigitsWindow_PMT3inchR14374_WCTE = 200. >
-< TriggerType_PMT3inchR14374_WCTE = NDigits >
+< TriggerType_PMT3inchR14374_WCTE = NoTrig >
 
 # Dark noise setting
 < DarkAddMode_PMT3inchR14374_WCTE = 1 > 
@@ -19,10 +19,10 @@
 < NumOfTubes_PMT3inchR14374_WCTE = 2014 >
 < MinTubeID_PMT3inchR14374_WCTE = 1 >
 < MaxTubeID_PMT3inchR14374_WCTE = 2014 >
-< DarkRate_PMT3inchR14374_WCTE = 0.0 >
+< DarkRate_PMT3inchR14374_WCTE = 1.0 > # kHz
 
 # 3" PMT setting
-# < PMTDE_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_DE_WCTE.txt > # txt file of PMT by PMT (quantum) detection efficiency
+< PMTDE_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_DE_WCTE.txt > # txt file of PMT by PMT detection efficiency relative to WCSim (<=1)
 # < PMTTime_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_Timing_WCTE.txt > # txt file of PMT by PMT timing offset, only used in Waveform digitizer
 
 # Digitizer setting
@@ -44,7 +44,7 @@
 # TQ response used in default WCSim digitizer
 < ScalFactorTTS_PMT3inchR14374_WCTE = 1 >
 < SPECDFFile_PMT3inchR14374_WCTE = $MDTROOT/parameter/SPE_CDF_PMT3inchR14374_WCTE.txt >
-< AngularResponse_PMT3inchR14374_WCTE = $MDTROOT/parameter/AngularResponse_PMT3inchR14374_WCTE.txt >
+# < AngularResponse_PMT3inchR14374_WCTE = $MDTROOT/parameter/AngularResponse_PMT3inchR14374_WCTE.txt > # additional angular response to scale SPE charge 
 
 # Waveform digitizer setting
 < WaveformFile = $MDTROOT/parameter/pmt_sig_ref_phot_fft_iterp_1.txt > # 1PE pulse waveform (amplitude = 2048)
