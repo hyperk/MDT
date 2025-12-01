@@ -22,7 +22,7 @@
 < DarkRate_PMT3inchR14374_WCTE = 1.0 > # kHz
 
 # 3" PMT setting
-< PMTDE_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_DE_WCTE.txt > # txt file of PMT by PMT detection efficiency relative to WCSim (<=1)
+< PMTDE_PMT3inchR14374_WCTE = $MDTROOT/parameter/wcte_angular_eff.root > # txt file of PMT by PMT detection efficiency relative to WCSim (<=1)
 # < PMTTime_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_Timing_WCTE.txt > # txt file of PMT by PMT timing offset, only used in Waveform digitizer
 
 # Digitizer setting
