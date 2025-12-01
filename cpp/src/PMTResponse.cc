@@ -110,15 +110,19 @@ bool GenericPMTResponse::ApplyDE(const TrueHit* th, const HitTube *ht)
 {
     if (fLoadDE>0 && ht)
     {
-        int tubeID = ht->GetTubeID();
-        if (tubeID>=fLoadDE)
+        int mPMTID = ht->GetmPMTID();
+        if (mPMTID>=fLoadDE)
         {
             cout<<" GenericPMTResponse::ApplyDE" <<endl;
-            cout<<"  - tubeID = " << tubeID << " >= fLoadDE = " << fLoadDE << endl;
+            cout<<"  - mPMTID = " << mPMTID << " >= fLoadDE = " << fLoadDE << endl;
             cout<<"  -> EXIT" <<endl;
             exit(-1);
         }
-        return fRand->Rndm() < fDE[tubeID];
+
+        double costh = 0;
+        for (int i=0;i<3;i++) costh -= th->GetDirection(i)*ht->GetOrientation(i);
+
+        return fRand->Rndm() < fDE[mPMTID]->Eval(costh,0,"S");;
     }
 
     return true;
@@ -187,29 +191,40 @@ void GenericPMTResponse::LoadPMTDE(const string &filename)
 {
     fLoadDE = 0;
     fDE.clear();
-    ifstream ifs(filename.c_str());
-    if (!ifs)
+
+    if (filename.size()==0)
     {
         cout<<" GenericPMTResponse::LoadPMTDE" <<endl;
         cout<<"  - No PMT QE file: " << filename <<endl;
         cout<<"  - Do not apply individual PMT DE " << endl;
+        return;
     }
-    string aLine;
-    while( std::getline(ifs, aLine) )
+    TFile f(filename.c_str());
+    if (!f.IsOpen())
     {
-        if( aLine[0] == '#' ){ continue; }
-        stringstream ssline(aLine);
-        string item;
-        while (getline(ssline, item, ssline.widen(' ')))
-        {
-            fDE.push_back( atof(item.c_str()) );
-        }
+        cout<<" GenericPMTResponse::LoadPMTDE" <<endl;
+        cout<<"  - Cannot open PMT QE file: " << filename <<endl;
+        cout<<"  -> EXIT" <<endl;
+        exit(-1);
     }
-    ifs.close();
+    TGraph* graph;
+    while ( (graph=(TGraph*)f.Get(Form("mPMT%i",fLoadDE))) )
+    {
+        graph->SetBit(TGraph::kIsSortedX);
+        fDE.push_back(graph);
+        fLoadDE++;
+    }
+    f.Close();
 
-    fLoadDE = fDE.size();
-
-    if (fLoadDE>0)
+    if (fLoadDE==0)
+    {
+        cout<<" GenericPMTResponse::LoadPMTDE" <<endl;
+        cout<<"  - Load PMT QE file: " << filename <<endl;
+        cout<<"  - No graph loaded!!! " << endl;
+        cout<<"  -> EXIT" <<endl;
+        exit(-1);
+    }
+    else
     {
         cout<<" GenericPMTResponse::LoadPMTDE" <<endl;
         cout<<"  - Load PMT QE file: " << filename <<endl;
