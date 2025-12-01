@@ -122,7 +122,7 @@ bool GenericPMTResponse::ApplyDE(const TrueHit* th, const HitTube *ht)
         double costh = 0;
         for (int i=0;i<3;i++) costh -= th->GetDirection(i)*ht->GetOrientation(i);
 
-        return fRand->Rndm() < fDE[mPMTID]->Eval(costh,0,"S");;
+        return fRand->Rndm() < fDE[mPMTID]->Eval(costh);
     }
 
     return true;
