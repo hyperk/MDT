@@ -162,6 +162,8 @@ HitDigitizer_mPMT::HitDigitizer_mPMT(int seed) : HitDigitizer(seed)
     fHitInsensitivityPeriod = 8;
     fAmplitudeThreshold = 20.;
     fAmplitudeSigma = 0.37;
+    fADCMax = 999999;
+    fADCOverflow = 0;
 
     Configuration *Conf = Configuration::GetInstance();
     Conf->GetValue<float>("SamplingInterval", fDt);
@@ -178,6 +180,8 @@ HitDigitizer_mPMT::HitDigitizer_mPMT(int seed) : HitDigitizer(seed)
 
     this->LoadWaveform(Conf->GetValue<string>("WaveformFile"));
     Conf->GetValue<float>("AmplitudeSigma", fAmplitudeSigma);
+    Conf->GetValue<float>("ADCMax", fADCMax);
+    Conf->GetValue<int>("ADCOverflow", fADCOverflow);
 }
 
 HitDigitizer_mPMT::~HitDigitizer_mPMT()
@@ -369,7 +373,13 @@ TH1F HitDigitizer_mPMT::BuildWavetrain(const vector<TrueHit*> PEs, double wavefo
 
     for (int i=1;i<=hWT.GetNbinsX();i++)
     {
-        double val = (int)(hWT.GetBinContent(i)/fDv);
+        double val = hWT.GetBinContent(i);
+        if (val>fADCMax)
+        {
+            val = fADCMax;
+            if (fADCOverflow>0) val = -fADCMax;
+        }
+        val = (int)(val/fDv);
         val *= fDv;
         hWT.SetBinContent(i,val);
         hWT.SetBinError(i,fDv);

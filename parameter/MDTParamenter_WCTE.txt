@@ -22,7 +22,7 @@
 < DarkRate_PMT3inchR14374_WCTE = 1.0 > # kHz
 
 # 3" PMT setting
-< PMTDE_PMT3inchR14374_WCTE = $MDTROOT/parameter/wcte_angular_eff.root > # txt file of PMT by PMT detection efficiency relative to WCSim (<=1)
+< PMTDE_PMT3inchR14374_WCTE = $MDTROOT/parameter/wcte_angular_eff.root > # ROOT file of PMT by PMT detection efficiency relative to WCSim (<=1)
 # < PMTTime_PMT3inchR14374_WCTE = $MDTROOT/parameter/PMT_Timing_WCTE.txt > # txt file of PMT by PMT timing offset, only used in Waveform digitizer
 
 # Digitizer setting
@@ -48,6 +48,8 @@
 # Waveform digitizer setting
 < WaveformFile = $MDTROOT/parameter/pmt_sig_ref_phot_fft_iterp_1.txt > # 1PE pulse waveform (amplitude = 2048)
 < AmplitudeSigma = 0.37 > # 1PE amplitude sigma in fraction
+< ADCMax = 61440 > # ADC dynamic range ~ 30PE
+< ADCOverflow = 1 > # Overflow causes ADC values to flip to negative
 < WaveformOffset = 0 > # ns
 < SamplingInterval = 8 > # ns
 < SamplingResolution = 0.1 >
