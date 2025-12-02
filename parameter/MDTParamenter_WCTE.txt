@@ -39,7 +39,7 @@
 < FlagMultDigits = 1 >
 
 # Choice of digitizer
-< DigitizerType_PMT3inchR14374_WCTE = 0 > # 0 = default WCSim digitizer, 1 = Waveform digitizer
+< DigitizerType_PMT3inchR14374_WCTE = 1 > # 0 = default WCSim digitizer, 1 = Waveform digitizer
 
 # TQ response used in default WCSim digitizer
 < ScalFactorTTS_PMT3inchR14374_WCTE = 1 >
