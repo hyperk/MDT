@@ -61,4 +61,5 @@ class HitDigitizer_mPMT : public HitDigitizer
         float fDigiTimeOffset;
         int fHitInsensitivityPeriod;
         float fAmplitudeThreshold;
+        int fRandomSampleStartTime;
 };

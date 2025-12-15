@@ -164,6 +164,7 @@ HitDigitizer_mPMT::HitDigitizer_mPMT(int seed) : HitDigitizer(seed)
     fAmplitudeSigma = 0.37;
     fADCMax = 999999;
     fADCOverflow = 0;
+    fRandomSampleStartTime = 0;
 
     Configuration *Conf = Configuration::GetInstance();
     Conf->GetValue<float>("SamplingInterval", fDt);
@@ -177,6 +178,7 @@ HitDigitizer_mPMT::HitDigitizer_mPMT(int seed) : HitDigitizer(seed)
     Conf->GetValue<int>("ChargeWindowBefore", fChargeWindowBefore);
     Conf->GetValue<int>("ChargeWindowAfter", fChargeWindowAfter);
     Conf->GetValue<int>("HitInsensitivityPeriod", fHitInsensitivityPeriod);
+    Conf->GetValue<int>("RandomSampleStartTime", fRandomSampleStartTime);
 
     this->LoadWaveform(Conf->GetValue<string>("WaveformFile"));
     Conf->GetValue<float>("AmplitudeSigma", fAmplitudeSigma);
@@ -349,6 +351,12 @@ TH1F HitDigitizer_mPMT::BuildWavetrain(const vector<TrueHit*> PEs, double wavefo
     double dt = fDt; 
     double tmin = floor((PEs.front()->GetTime())/dt)*dt;
     double tmax = ceil((PEs.back()->GetTime()+waveform_window)/dt)*dt; 
+    // Randomize waveform sample start time if necessary
+    if (fRandomSampleStartTime==1)
+    {
+        tmin = floor((PEs.front()->GetTime())/dt)*dt - dt*fRand->Uniform(0,1);
+        tmax = ceil((PEs.back()->GetTime()+waveform_window-tmin)/dt)*dt+tmin; 
+    }
     TH1F hWT("","",(int)(tmax-tmin)/dt,tmin,tmax);
 
     double waveform_offset = fWaveformOffset;

@@ -51,6 +51,7 @@
 < ADCMax = 61440 > # ADC dynamic range ~ 30PE
 < ADCOverflow = 0 > # Overflow causes ADC values to flip to negative
 < WaveformOffset = 0 > # ns
+< RandomSampleStartTime = 1 > # 1 = Waveform window start time is randomized with Uniform(0,SamplingInterval)
 < SamplingInterval = 8 > # ns
 < SamplingResolution = 0.1 >
 < AmplitudeThreshold = 683 > # self-trigger threshold (1/3 PE)
