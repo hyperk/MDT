@@ -236,6 +236,8 @@ void WCRootData::AddDigiHits(MDTManager *mdt, int eventID, int iPMT)
 void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID, int iPMT)
 {
     WCSimRootTrigger* anEvent = fSpEvt[iPMT]->GetTrigger(0);
+    //first trigger has SubEvtNumber=1
+    anEvent->SetHeader(eventID, 0, 0, 1);
     // Save raw hits
     // container for photon info
     std::vector<double> truetime;
@@ -439,6 +441,28 @@ void WCRootData::FillTree()
 void WCRootData::AddTracks(const WCSimRootTrigger *aEvtIn, float offset_time, int iPMT)
 {
     WCSimRootTrigger *aEvtOut = fSpEvt[iPMT]->GetTrigger(0);
+        
+    // Copy truth info (Npar, Nvtxs, Jmu, Jp, Vtxs, Modes, Vtxsvol)
+    int nv = aEvtIn->GetNvtxs();
+    if (nv < 0) nv = 0;
+    if (nv > 900) nv = 900;
+    if (aEvtIn->GetNvtxs() < 0 || aEvtIn->GetNvtxs() > MAX_N_VERTICES) {
+        std::cerr << "WARN Nvtxs=" << aEvtIn->GetNvtxs() << "\n";
+    }
+    aEvtOut->SetNpar(aEvtIn->GetNpar());
+    aEvtOut->SetNvtxs(nv);
+    aEvtOut->SetVecRecNumber(aEvtIn->GetVecRecNumber());
+    aEvtOut->SetJmu(aEvtIn->GetJmu());
+    aEvtOut->SetJp(aEvtIn->GetJp());
+
+    for (int iv = 0; iv < nv; ++iv) {
+        aEvtOut->SetMode(iv, aEvtIn->GetMode(iv));
+        aEvtOut->SetVtxsvol(iv, aEvtIn->GetVtxsvol(iv));
+        for (int i = 0; i < 4; ++i) {
+            aEvtOut->SetVtxs(iv, i, aEvtIn->GetVtxs(iv, i));
+        }
+    }
+
     TClonesArray *tracks = aEvtIn->GetTracks();
     const int ntrack = tracks->GetEntries();
     for(int i=0; i<ntrack; i++)
