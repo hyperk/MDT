@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['hitdigitizer_31',['HitDigitizer',['../classHitDigitizer.html',1,'']]],
-  ['hittube_32',['HitTube',['../classHitTube.html',1,'']]],
-  ['hittubecollection_33',['HitTubeCollection',['../classHitTubeCollection.html',1,'']]]
+  ['hitdigitizer_32',['HitDigitizer',['../classHitDigitizer.html',1,'']]],
+  ['hitdigitizer_5fmpmt_33',['HitDigitizer_mPMT',['../classHitDigitizer__mPMT.html',1,'']]],
+  ['hittube_34',['HitTube',['../classHitTube.html',1,'']]],
+  ['hittubecollection_35',['HitTubeCollection',['../classHitTubeCollection.html',1,'']]]
 ];

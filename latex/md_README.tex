@@ -61,5 +61,27 @@ Input variables are\+:
 \item {\ttfamily Initial\+Seed}\+: Random seed
 \item {\ttfamily IDNu\+Int\+Rate},{\ttfamily Beam\+Bkg\+Rate}\+: Mean number of ID and background events per spill. In each spill, the actual number of interactions are drawn from a Poisson distribution, and interaction timing according to the bunch structure (see {\ttfamily \mbox{\hyperlink{classBeamTiming}{Beam\+Timing}}} class under {\ttfamily app/utilities/\+WCRoot\+Data/})
 \item {\ttfamily Use\+OD}\+: Process OD hits
-\item {\ttfamily Num\+Of\+Spills\+Saved\+Per\+File}, {\ttfamily Total\+Num\+Of\+Spills}\+: output spill setup 
-\end{DoxyItemize}
+\item {\ttfamily Num\+Of\+Spills\+Saved\+Per\+File}, {\ttfamily Total\+Num\+Of\+Spills}\+: output spill setup
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md4}{}\doxysection{How to simulate and access digitized pulses}\label{md_README_autotoc_md4}
+Turn on waveform simulation in the parameter file by {\ttfamily $<$ Digitizer\+Type\+\_\+\+PMTType = 1 $>$}.
+
+For each true hit, a digitized waveform is simulated by sampling the single PE pulse (defined by the {\ttfamily $<$ Waveform\+File $>$} parameter) every 8 ns with 0.\+1 resolution. If there is another PE arriving within the hit integration window, the waveforms are added.
+
+To do pulse fitting, the hit finding algorithm \href{https://github.com/hyperk/MDT/issues/8}{\texttt{ here}} is implemented to calculate the digitized time and charge.
+
+Optionally, the waveform and digi TQ pulls of the first pulse of each PMT in each event can be saved by setting {\ttfamily $<$ Save\+Waveform = 1 $>$}. To read the pulses, 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{// open the file and get the digitzed waveform tree}
+\DoxyCodeLine{TTree* wcsimDigiWFTree = (TTree*)f-\/>Get("{}wcsimDigiWFTree"{});}
+\DoxyCodeLine{TClonesArray *arr = new TClonesArray("{}TH1F"{});}
+\DoxyCodeLine{wcsimDigiWFTree-\/>GetBranch("{}wcsimrootevent\_waveform"{})-\/>SetAutoDelete(kFALSE);}
+\DoxyCodeLine{wcsimDigiWFTree-\/>SetBranchAddress("{}wcsimrootevent\_waveform"{},\&arr);}
+\DoxyCodeLine{// In each event, each array index corresponds to PMTId-\/1 (from 0 to nPMTs-\/1)}
+\DoxyCodeLine{wcsimDigiWFTree-\/>GetEntry(0); // EvtId}
+\DoxyCodeLine{TH1F* h = (TH1F*)arr-\/>At(0); // PMTId-\/1}
+\DoxyCodeLine{// Time and charge pulls of digitized hits}
+\DoxyCodeLine{TTree* WCSimDigiPulls = (TTree*)f-\/>Get("{}WCSimDigiPulls"{});}
+\DoxyCodeLine{WCSimDigiPulls-\/>Scan("{}PullT:TrueT:PullQ:TrueQ:EvtId:PMTId"{},"{}PullT>-\/99"{}); // Pull==-\/99 means no digi hit for this PMT in this event}
+
+\end{DoxyCode}
+ 

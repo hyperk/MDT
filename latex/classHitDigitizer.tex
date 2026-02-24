@@ -1,5 +1,11 @@
 \hypertarget{classHitDigitizer}{}\doxysection{Hit\+Digitizer Class Reference}
 \label{classHitDigitizer}\index{HitDigitizer@{HitDigitizer}}
+Inheritance diagram for Hit\+Digitizer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classHitDigitizer}
+\end{center}
+\end{figure}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -7,16 +13,37 @@
 {\bfseries Hit\+Digitizer} (int s=67823)
 \item 
 \mbox{\Hypertarget{classHitDigitizer_a177b48483e6bb545cb53885a010be5b9}\label{classHitDigitizer_a177b48483e6bb545cb53885a010be5b9}} 
-void {\bfseries Digitize} (\mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}} $\ast$, \mbox{\hyperlink{classPMTResponse}{PMTResponse}} $\ast$)
+virtual void {\bfseries Digitize} (\mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}} $\ast$, \mbox{\hyperlink{classPMTResponse}{PMTResponse}} $\ast$)
 \item 
 \mbox{\Hypertarget{classHitDigitizer_a5682e001660790a2f86e29bc7bcc2f23}\label{classHitDigitizer_a5682e001660790a2f86e29bc7bcc2f23}} 
-void {\bfseries Digitize\+Tube} (\mbox{\hyperlink{classHitTube}{Hit\+Tube}} $\ast$, \mbox{\hyperlink{classPMTResponse}{PMTResponse}} $\ast$)
+virtual void {\bfseries Digitize\+Tube} (\mbox{\hyperlink{classHitTube}{Hit\+Tube}} $\ast$, \mbox{\hyperlink{classPMTResponse}{PMTResponse}} $\ast$)
 \item 
 \mbox{\Hypertarget{classHitDigitizer_a243c7ac908ef429298a18ab91673b9d7}\label{classHitDigitizer_a243c7ac908ef429298a18ab91673b9d7}} 
-void {\bfseries Apply\+Threshold} (double \&, bool \&)
+virtual void {\bfseries Apply\+Threshold} (double \&, bool \&)
 \item 
 \mbox{\Hypertarget{classHitDigitizer_ac3edf4179723faa1477d24021f3d25c1}\label{classHitDigitizer_ac3edf4179723faa1477d24021f3d25c1}} 
-double {\bfseries Do\+Truncate} (const double, const double)
+virtual double {\bfseries Do\+Truncate} (const double, const double)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classHitDigitizer_a0ae5e39e13c527a6987cd27bf57a6731}\label{classHitDigitizer_a0ae5e39e13c527a6987cd27bf57a6731}} 
+float {\bfseries f\+Precision\+Charge}
+\item 
+\mbox{\Hypertarget{classHitDigitizer_a2878136f0399ecd80dc8708ace0121d4}\label{classHitDigitizer_a2878136f0399ecd80dc8708ace0121d4}} 
+float {\bfseries f\+Precision\+Timing}
+\item 
+\mbox{\Hypertarget{classHitDigitizer_a978fdf7607f0a8749d1b3283d4167f4d}\label{classHitDigitizer_a978fdf7607f0a8749d1b3283d4167f4d}} 
+float {\bfseries f\+Efficiency}
+\item 
+\mbox{\Hypertarget{classHitDigitizer_a3fd81c99f57ce3e51b44d0573f1518b7}\label{classHitDigitizer_a3fd81c99f57ce3e51b44d0573f1518b7}} 
+float {\bfseries f\+Integ\+Window}
+\item 
+\mbox{\Hypertarget{classHitDigitizer_a08c746d71eb1af201bff1483784c77b7}\label{classHitDigitizer_a08c746d71eb1af201bff1483784c77b7}} 
+int {\bfseries f\+Apply\+Eff}
+\item 
+\mbox{\Hypertarget{classHitDigitizer_a643c941e0282fd41cc9c4a6fd9abd53e}\label{classHitDigitizer_a643c941e0282fd41cc9c4a6fd9abd53e}} 
+\mbox{\hyperlink{classMTRandom}{MTRandom}} $\ast$ {\bfseries f\+Rand}
 \end{DoxyCompactItemize}
 
 

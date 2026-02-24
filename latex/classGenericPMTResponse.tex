@@ -21,6 +21,9 @@ virtual double {\bfseries Get\+Raw\+SPE} (const \mbox{\hyperlink{classTrueHit}{T
 \mbox{\Hypertarget{classGenericPMTResponse_a1c519e601b19af02b551c739c6ef0eb7}\label{classGenericPMTResponse_a1c519e601b19af02b551c739c6ef0eb7}} 
 virtual float {\bfseries Hit\+Time\+Smearing} (float)
 \item 
+\mbox{\Hypertarget{classGenericPMTResponse_ac024e4ff579db2aec2dd5f3f00472182}\label{classGenericPMTResponse_ac024e4ff579db2aec2dd5f3f00472182}} 
+virtual float {\bfseries Hit\+Time\+Smearing} (float, int)
+\item 
 \mbox{\Hypertarget{classGenericPMTResponse_ad65773c7b4df8bebf05b095b308ad8c3}\label{classGenericPMTResponse_ad65773c7b4df8bebf05b095b308ad8c3}} 
 virtual bool {\bfseries Apply\+DE} (const \mbox{\hyperlink{classTrueHit}{True\+Hit}} $\ast$th=NULL, const \mbox{\hyperlink{classHitTube}{Hit\+Tube}} $\ast$ht=NULL)
 \end{DoxyCompactItemize}
@@ -29,6 +32,12 @@ virtual bool {\bfseries Apply\+DE} (const \mbox{\hyperlink{classTrueHit}{True\+H
 \item 
 \mbox{\Hypertarget{classGenericPMTResponse_a278498f2ac59ffd94b1e5605e8314696}\label{classGenericPMTResponse_a278498f2ac59ffd94b1e5605e8314696}} 
 void {\bfseries Load\+CDFOf\+SPE} (const string \&s)
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a10cb17af18df92c8bc24371d6114f15d}\label{classGenericPMTResponse_a10cb17af18df92c8bc24371d6114f15d}} 
+void {\bfseries Load\+PMTDE} (const string \&s)
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a580c10cafaf7c9d36561cc616a3a5052}\label{classGenericPMTResponse_a580c10cafaf7c9d36561cc616a3a5052}} 
+void {\bfseries Load\+PMTTime} (const string \&s)
 \end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
@@ -38,6 +47,24 @@ float {\bfseries fqpe0} \mbox{[}501\mbox{]}
 \item 
 \mbox{\Hypertarget{classGenericPMTResponse_a39ffb76c7eb6f3668dbbb30613c8a84a}\label{classGenericPMTResponse_a39ffb76c7eb6f3668dbbb30613c8a84a}} 
 string {\bfseries f\+Txt\+File\+SPECDF}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a43751fa14564243d0a9f896ed0c94de7}\label{classGenericPMTResponse_a43751fa14564243d0a9f896ed0c94de7}} 
+int {\bfseries f\+Load\+DE}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_af32fb55a8993072f0ca9f79628ff2c10}\label{classGenericPMTResponse_af32fb55a8993072f0ca9f79628ff2c10}} 
+std\+::vector$<$ double $>$ {\bfseries f\+DE}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a79baebee45a20f9c2eddeb27f0d3ec89}\label{classGenericPMTResponse_a79baebee45a20f9c2eddeb27f0d3ec89}} 
+string {\bfseries f\+PMTDEFile}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a1aa2be2593c8a40e920fbc4a716724c6}\label{classGenericPMTResponse_a1aa2be2593c8a40e920fbc4a716724c6}} 
+int {\bfseries f\+LoadT}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_a91970e5dead8421d75c8cf79fa1d1d03}\label{classGenericPMTResponse_a91970e5dead8421d75c8cf79fa1d1d03}} 
+std\+::vector$<$ double $>$ {\bfseries fT}
+\item 
+\mbox{\Hypertarget{classGenericPMTResponse_ad357bb0ff9553c3b4459d5b77ba38661}\label{classGenericPMTResponse_ad357bb0ff9553c3b4459d5b77ba38661}} 
+string {\bfseries f\+PMTTFile}
 \item 
 \mbox{\Hypertarget{classGenericPMTResponse_a1dbddf5f7d546e816dab8bc786a0c01d}\label{classGenericPMTResponse_a1dbddf5f7d546e816dab8bc786a0c01d}} 
 float {\bfseries f\+TRes\+Constant}

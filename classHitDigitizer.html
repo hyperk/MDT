@@ -63,11 +63,21 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classHitDigitizer-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">HitDigitizer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for HitDigitizer:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classHitDigitizer.png" usemap="#HitDigitizer_map" alt=""/>
+  <map id="HitDigitizer_map" name="HitDigitizer_map">
+<area href="classHitDigitizer__mPMT.html" alt="HitDigitizer_mPMT" shape="rect" coords="0,56,115,80"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -75,17 +85,38 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>HitDigitizer</b> (int s=67823)</td></tr>
 <tr class="separator:ab8477edb1d3706a85bd4209b98144946"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a177b48483e6bb545cb53885a010be5b9"><td class="memItemLeft" align="right" valign="top"><a id="a177b48483e6bb545cb53885a010be5b9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Digitize</b> (<a class="el" href="classHitTubeCollection.html">HitTubeCollection</a> *, <a class="el" href="classPMTResponse.html">PMTResponse</a> *)</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Digitize</b> (<a class="el" href="classHitTubeCollection.html">HitTubeCollection</a> *, <a class="el" href="classPMTResponse.html">PMTResponse</a> *)</td></tr>
 <tr class="separator:a177b48483e6bb545cb53885a010be5b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5682e001660790a2f86e29bc7bcc2f23"><td class="memItemLeft" align="right" valign="top"><a id="a5682e001660790a2f86e29bc7bcc2f23"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>DigitizeTube</b> (<a class="el" href="classHitTube.html">HitTube</a> *, <a class="el" href="classPMTResponse.html">PMTResponse</a> *)</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>DigitizeTube</b> (<a class="el" href="classHitTube.html">HitTube</a> *, <a class="el" href="classPMTResponse.html">PMTResponse</a> *)</td></tr>
 <tr class="separator:a5682e001660790a2f86e29bc7bcc2f23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a243c7ac908ef429298a18ab91673b9d7"><td class="memItemLeft" align="right" valign="top"><a id="a243c7ac908ef429298a18ab91673b9d7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ApplyThreshold</b> (double &amp;, bool &amp;)</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>ApplyThreshold</b> (double &amp;, bool &amp;)</td></tr>
 <tr class="separator:a243c7ac908ef429298a18ab91673b9d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3edf4179723faa1477d24021f3d25c1"><td class="memItemLeft" align="right" valign="top"><a id="ac3edf4179723faa1477d24021f3d25c1"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>DoTruncate</b> (const double, const double)</td></tr>
+virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>DoTruncate</b> (const double, const double)</td></tr>
 <tr class="separator:ac3edf4179723faa1477d24021f3d25c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a0ae5e39e13c527a6987cd27bf57a6731"><td class="memItemLeft" align="right" valign="top"><a id="a0ae5e39e13c527a6987cd27bf57a6731"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>fPrecisionCharge</b></td></tr>
+<tr class="separator:a0ae5e39e13c527a6987cd27bf57a6731"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2878136f0399ecd80dc8708ace0121d4"><td class="memItemLeft" align="right" valign="top"><a id="a2878136f0399ecd80dc8708ace0121d4"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>fPrecisionTiming</b></td></tr>
+<tr class="separator:a2878136f0399ecd80dc8708ace0121d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a978fdf7607f0a8749d1b3283d4167f4d"><td class="memItemLeft" align="right" valign="top"><a id="a978fdf7607f0a8749d1b3283d4167f4d"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>fEfficiency</b></td></tr>
+<tr class="separator:a978fdf7607f0a8749d1b3283d4167f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fd81c99f57ce3e51b44d0573f1518b7"><td class="memItemLeft" align="right" valign="top"><a id="a3fd81c99f57ce3e51b44d0573f1518b7"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>fIntegWindow</b></td></tr>
+<tr class="separator:a3fd81c99f57ce3e51b44d0573f1518b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08c746d71eb1af201bff1483784c77b7"><td class="memItemLeft" align="right" valign="top"><a id="a08c746d71eb1af201bff1483784c77b7"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fApplyEff</b></td></tr>
+<tr class="separator:a08c746d71eb1af201bff1483784c77b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a643c941e0282fd41cc9c4a6fd9abd53e"><td class="memItemLeft" align="right" valign="top"><a id="a643c941e0282fd41cc9c4a6fd9abd53e"></a>
+<a class="el" href="classMTRandom.html">MTRandom</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>fRand</b></td></tr>
+<tr class="separator:a643c941e0282fd41cc9c4a6fd9abd53e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>cpp/include/<a class="el" href="HitDigitizer_8h_source.html">HitDigitizer.h</a></li>

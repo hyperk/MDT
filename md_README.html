@@ -111,9 +111,25 @@ IWCD pile-up generation</h1>
 <li><code>InitialSeed</code>: Random seed</li>
 <li><code>IDNuIntRate</code>,<code>BeamBkgRate</code>: Mean number of ID and background events per spill. In each spill, the actual number of interactions are drawn from a Poisson distribution, and interaction timing according to the bunch structure (see <code><a class="el" href="classBeamTiming.html">BeamTiming</a></code> class under <code>app/utilities/WCRootData/</code>)</li>
 <li><code>UseOD</code>: Process OD hits</li>
-<li><code>NumOfSpillsSavedPerFile</code>, <code>TotalNumOfSpills</code>: output spill setup </li>
+<li><code>NumOfSpillsSavedPerFile</code>, <code>TotalNumOfSpills</code>: output spill setup</li>
 </ul>
-</div></div><!-- contents -->
+<h1><a class="anchor" id="autotoc_md4"></a>
+How to simulate and access digitized pulses</h1>
+<p>Turn on waveform simulation in the parameter file by <code>&lt; DigitizerType_PMTType = 1 &gt;</code>.</p>
+<p>For each true hit, a digitized waveform is simulated by sampling the single PE pulse (defined by the <code>&lt; WaveformFile &gt;</code> parameter) every 8 ns with 0.1 resolution. If there is another PE arriving within the hit integration window, the waveforms are added.</p>
+<p>To do pulse fitting, the hit finding algorithm <a href="https://github.com/hyperk/MDT/issues/8">here</a> is implemented to calculate the digitized time and charge.</p>
+<p>Optionally, the waveform and digi TQ pulls of the first pulse of each PMT in each event can be saved by setting <code>&lt; SaveWaveform = 1 &gt;</code>. To read the pulses, </p><div class="fragment"><div class="line">// open the file and get the digitzed waveform tree</div>
+<div class="line">TTree* wcsimDigiWFTree = (TTree*)f-&gt;Get(&quot;wcsimDigiWFTree&quot;);</div>
+<div class="line">TClonesArray *arr = new TClonesArray(&quot;TH1F&quot;);</div>
+<div class="line">wcsimDigiWFTree-&gt;GetBranch(&quot;wcsimrootevent_waveform&quot;)-&gt;SetAutoDelete(kFALSE);</div>
+<div class="line">wcsimDigiWFTree-&gt;SetBranchAddress(&quot;wcsimrootevent_waveform&quot;,&amp;arr);</div>
+<div class="line">// In each event, each array index corresponds to PMTId-1 (from 0 to nPMTs-1)</div>
+<div class="line">wcsimDigiWFTree-&gt;GetEntry(0); // EvtId</div>
+<div class="line">TH1F* h = (TH1F*)arr-&gt;At(0); // PMTId-1</div>
+<div class="line">// Time and charge pulls of digitized hits</div>
+<div class="line">TTree* WCSimDigiPulls = (TTree*)f-&gt;Get(&quot;WCSimDigiPulls&quot;);</div>
+<div class="line">WCSimDigiPulls-&gt;Scan(&quot;PullT:TrueT:PullQ:TrueQ:EvtId:PMTId&quot;,&quot;PullT&gt;-99&quot;); // Pull==-99 means no digi hit for this PMT in this event</div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
