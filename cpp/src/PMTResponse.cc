@@ -20,7 +20,6 @@ GenericPMTResponse::GenericPMTResponse(int seed, const string &pmtname)
     fSclFacTTS = 1.0;
     fLoadDE = 0;
     fLoadT = 0;
-    fLoadAR = 0;
     this->Initialize(seed, pmtname);
 }
 
@@ -29,7 +28,6 @@ GenericPMTResponse::GenericPMTResponse()
     fSclFacTTS = 1.0;
     fLoadDE = 0;
     fLoadT = 0;
-    fLoadAR = 0;
 }
 
 GenericPMTResponse::~GenericPMTResponse()
@@ -52,7 +50,6 @@ void GenericPMTResponse::Initialize(int seed, const string &pmtname)
     s["SPECDFFile"] = "SPECDFFile";
     s["PMTDE"] = "PMTDE";
     s["PMTTime"] = "PMTTime";
-    s["AngularResponse"] = "AngularResponse";
 
     if( fPMTType!="" )
     {
@@ -70,40 +67,21 @@ void GenericPMTResponse::Initialize(int seed, const string &pmtname)
     Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
     Conf->GetValue<string>(s["PMTDE"], fPMTDEFile);
     Conf->GetValue<string>(s["PMTTime"], fPMTTFile);
-    Conf->GetValue<string>(s["AngularResponse"], fARFile);
 
     this->LoadCDFOfSPE(fTxtFileSPECDF);
     this->LoadPMTDE(fPMTDEFile);
     this->LoadPMTTime(fPMTTFile);
-    this->LoadAngularResponse(fARFile);
 }
 
 
 double GenericPMTResponse::GetRawSPE(const TrueHit* th, const HitTube* ht)
 {
-    double ar = 1;
-    if (fLoadAR>0 && ht)
-    {
-        int tubeID = ht->GetTubeID();
-        if (tubeID>=fLoadAR)
-        {
-            cout<<" GenericPMTResponse::GetRawSPE" <<endl;
-            cout<<"  - tubeID = " << tubeID << " >= fLoadAR = " << fLoadAR << endl;
-            cout<<"  -> EXIT" <<endl;
-            exit(-1);
-        }
-        if (th->GetParentId()>=0)
-        {
-            double costh = -ht->GetOrientation(0)*th->GetDirection(0)-ht->GetOrientation(1)*th->GetDirection(1)-ht->GetOrientation(2)*th->GetDirection(2);
-            ar = 1 + (costh-0.5)*2*fAR[tubeID];
-        }
-    }
     int i;
     double random1=fRand->Rndm();
     for(i = 0; i < 501; i++){
       if( random1<=*(fqpe0+i) ){ break; }
     }
-    return (double(i-50) + fRand->Rndm())/22.83*ar;
+    return (double(i-50) + fRand->Rndm())/22.83;
 } 
 
 bool GenericPMTResponse::ApplyDE(const TrueHit* th, const HitTube *ht)
@@ -262,39 +240,6 @@ void GenericPMTResponse::LoadPMTTime(const string &filename)
         cout<<" GenericPMTResponse::LoadPMTTime" <<endl;
         cout<<"  - Load PMT Time file: " << filename <<endl;
         cout<<"  - # Entries = " << fLoadT << endl;
-    }
-}
-
-void GenericPMTResponse::LoadAngularResponse(const string &filename)
-{
-    fLoadAR = 0;
-    fAR.clear();
-    ifstream ifs(filename.c_str());
-    if (!ifs)
-    {
-        cout<<" GenericPMTResponse::LoadAngularResponse" <<endl;
-        cout<<"  - No Angular Response file: " << filename <<endl;
-        cout<<"  - Do not apply Angular Response weights " << endl;
-    }
-    string aLine;
-    while( std::getline(ifs, aLine) )
-    {
-        if( aLine[0] == '#' ){ continue; }
-        stringstream ssline(aLine);
-        string item;
-        while (getline(ssline, item, ssline.widen(' ')))
-        {
-            fAR.push_back( atof(item.c_str()) );
-        }
-    }
-    ifs.close();
-
-    fLoadAR = fAR.size();
-    if (fLoadAR>0)
-    {
-        cout<<" GenericPMTResponse::LoadAngularResponse" <<endl;
-        cout<<"  - Load Anuglar Response file: " << filename <<endl;
-        cout<<"  - # Entries = " << fLoadAR << endl;
     }
 }
 
@@ -460,7 +405,6 @@ void Response3inchR14374_WCTE::Initialize(int seed, const string &pmtname)
     s["SPECDFFile"] = "SPECDFFile";
     s["PMTDE"] = "PMTDE";
     s["PMTTime"] = "PMTTime";
-    s["AngularResponse"] = "AngularResponse";
     if( fPMTType!="" )
     {
         map<string, string>::iterator i;
@@ -474,11 +418,9 @@ void Response3inchR14374_WCTE::Initialize(int seed, const string &pmtname)
     Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
     Conf->GetValue<string>(s["PMTDE"], fPMTDEFile);
     Conf->GetValue<string>(s["PMTTime"], fPMTTFile);
-    Conf->GetValue<string>(s["AngularResponse"], fARFile);
     this->LoadCDFOfSPE(fTxtFileSPECDF);
     this->LoadPMTDE(fPMTDEFile);
     this->LoadPMTTime(fPMTTFile);
-    this->LoadAngularResponse(fARFile);
 }
 
 float Response3inchR14374_WCTE::HitTimeSmearing(float Q)
