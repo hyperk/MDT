@@ -88,15 +88,14 @@ $(function() {
 <h1><a class="anchor" id="autotoc_md1"></a>
 WCTE/WCSim usage</h1>
 <p>Simple runtime procedures. First set up your ROOT and WCSIM: </p><div class="fragment"><div class="line">source your_thisroot.sh</div>
-<div class="line">export WCSIMDIR=your_WCSIM_installation</div>
-</div><!-- fragment --><p> If <code>libWCSimRoot.so</code> is not directly under <code>WCSIMDIR</code>, export to <code>WCSIMROOTDIR</code>. </p><div class="fragment"><div class="line">export WCSIMROOTDIR=your_libWCSimRoot.so_installation</div>
+<div class="line">source your_this_wcsim.sh # or just export WCSIM_BUILD_DIR</div>
 </div><!-- fragment --><p> Then set up the MDT environment. </p><div class="fragment"><div class="line">source envMDT.sh</div>
 <div class="line">cd $MDTROOT/cpp; make clean; make all</div>
 <div class="line">cd $MDTROOT/app/utilities/WCRootData; make clean; make all</div>
 <div class="line">cd $MDTROOT/app/application; make clean; make all</div>
 <div class="line">cd $MDTROOT</div>
 <div class="line"># edit variables properly in run_test_mdt4wcte.sh</div>
-<div class="line">bash run_test_mdt4iwcd.sh</div>
+<div class="line">bash run_test_mdt4wcte.sh</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md2"></a>
 IWCD usage</h1>
 <p>Essentially the same usage but with OD support. </p><div class="fragment"><div class="line"># edit variables properly in run_test_mdt4iwcd.sh</div>

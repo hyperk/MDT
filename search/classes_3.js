@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['hitdigitizer_30',['HitDigitizer',['../classHitDigitizer.html',1,'']]],
-  ['hittube_31',['HitTube',['../classHitTube.html',1,'']]],
-  ['hittubecollection_32',['HitTubeCollection',['../classHitTubeCollection.html',1,'']]]
+  ['hitdigitizer_31',['HitDigitizer',['../classHitDigitizer.html',1,'']]],
+  ['hittube_32',['HitTube',['../classHitTube.html',1,'']]],
+  ['hittubecollection_33',['HitTubeCollection',['../classHitTubeCollection.html',1,'']]]
 ];

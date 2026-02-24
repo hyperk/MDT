@@ -24,12 +24,7 @@ The library provides C++ classes that manage three tasks\+:
 Simple runtime procedures. First set up your ROOT and WCSIM\+: 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{source your\_thisroot.sh}
-\DoxyCodeLine{export WCSIMDIR=your\_WCSIM\_installation}
-
-\end{DoxyCode}
- If {\ttfamily lib\+WCSim\+Root.\+so} is not directly under {\ttfamily WCSIMDIR}, export to {\ttfamily WCSIMROOTDIR}. 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{export WCSIMROOTDIR=your\_libWCSimRoot.so\_installation}
+\DoxyCodeLine{source your\_this\_wcsim.sh \# or just export WCSIM\_BUILD\_DIR}
 
 \end{DoxyCode}
  Then set up the MDT environment. 
@@ -40,7 +35,7 @@ Simple runtime procedures. First set up your ROOT and WCSIM\+:
 \DoxyCodeLine{cd \$MDTROOT/app/application; make clean; make all}
 \DoxyCodeLine{cd \$MDTROOT}
 \DoxyCodeLine{\# edit variables properly in run\_test\_mdt4wcte.sh}
-\DoxyCodeLine{bash run\_test\_mdt4iwcd.sh}
+\DoxyCodeLine{bash run\_test\_mdt4wcte.sh}
 
 \end{DoxyCode}
 \hypertarget{md_README_autotoc_md2}{}\doxysection{IWCD usage}\label{md_README_autotoc_md2}
