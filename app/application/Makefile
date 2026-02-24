@@ -2,12 +2,12 @@ CXX=g++
 LD=g++
 
 CXXFLAGS += -Wall -std=c++11 -g $(shell root-config --cflags)\
-			-I$(WCSIMDIR)/include\
+			-I$(WCSIM_BUILD_DIR)/include/WCSim\
 			-I${MDTROOT}/cpp/include\
 			-I${WCRDROOT}/include
 
 LDFLAGS += $(shell root-config --ldflags) $(shell root-config --libs) -lTreePlayer\
-		   -L$(WCSIMROOTDIR) -lWCSimRoot\
+		   -L$(WCSIM_BUILD_DIR)/lib -lWCSimRoot\
 		   -L${MDTROOT}/cpp -lMDT\
 		   -L${WCRDROOT} -lWCRData
 

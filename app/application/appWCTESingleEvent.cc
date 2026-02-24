@@ -42,10 +42,10 @@ int main(int argc, char **argv)
 	// WCTE will use single PMT type, so define the corresponding type of 3-inch PMT
     const int NPMTType = 1;
     string fPMTType[NPMTType];
-    fPMTType[0] = "PMT3inchR12199_02";
+    fPMTType[0] = "PMT3inchR14374_WCTE";
 
     MDTManager *MDT = new MDTManager(fSeed);
-    MDT->RegisterPMTType(fPMTType[0], new PMTResponse3inchR12199_02());
+    MDT->RegisterPMTType(fPMTType[0], new Response3inchR14374_WCTE());
 
     const vector<string> listWCRootEvt{"wcsimrootevent"};
 

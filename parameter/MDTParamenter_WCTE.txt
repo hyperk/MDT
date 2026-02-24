@@ -1,36 +1,29 @@
 # Parameter setting 
 
 # Trigger setting
-< NDigitsThreshold = 25 >
-< NDigitsStepSize = 5 >
-< NDigitsPostTriggerWindow = +950. >
-< NDigitsPreTriggerWindow = -400. >
-< FailurePostTriggerWindow = +950. > # seems to be +950 by default //+100000.
-< FailurePreTriggerWindow = -400. >
-< FailureTime = 100. >
-< NDigitsWindow = 200. >
+< NDigitsThreshold_PMT3inchR14374_WCTE = 25 >
+< NDigitsStepSize_PMT3inchR14374_WCTE = 5 >
+< NDigitsPostTriggerWindow_PMT3inchR14374_WCTE = +950. >
+< NDigitsPreTriggerWindow_PMT3inchR14374_WCTE = -400. >
+< FailurePostTriggerWindow_PMT3inchR14374_WCTE = +950. > # seems to be +950 by default //+100000.
+< FailurePreTriggerWindow_PMT3inchR14374_WCTE = -400. >
+< FailureTime_PMT3inchR14374_WCTE = 100. >
+< NDigitsWindow_PMT3inchR14374_WCTE = 200. >
+< TriggerType_PMT3inchR14374_WCTE = NDigits >
 
 # Dark noise setting
-< NumOfTubes = 2014 >
-< MinTubeID = 1 >
-< MaxTubeID = 2014 >
-< DarkAddMode = 1 > 
-< DarkRate = 0.0 > // kHz
-< DarkM0WindowLow = 0. > // ns
-< DarkM0WindowUp = 100000. > // ns
-< DarkM1Window = 4000. > // ns
-< NumOfTubes_PMT3inchR12199_02 = 2014 >
-< MinTubeID_PMT3inchR12199_02 = 1 >
-< MaxTubeID_PMT3inchR12199_02 = 2014 >
-< DarkRate_PMT3inchR12199_02 = 0.0 >
+< DarkAddMode_PMT3inchR14374_WCTE = 1 > 
+< DarkM0WindowLow_PMT3inchR14374_WCTE = 0. > // ns
+< DarkM0WindowUp_PMT3inchR14374_WCTE = 100000. > // ns
+< DarkM1Window_PMT3inchR14374_WCTE = 4000. > // ns
+< NumOfTubes_PMT3inchR14374_WCTE = 2014 >
+< MinTubeID_PMT3inchR14374_WCTE = 1 >
+< MaxTubeID_PMT3inchR14374_WCTE = 2014 >
+< DarkRate_PMT3inchR14374_WCTE = 0.0 >
 
 # 3" PMT setting
-< TimingResConstant = 1.890 > # TTS(FWHM) = 1ns at 1 charge
-< TimingResMinimum = 0.58 >
-< ScalFactorTTS = 1 > 
-< TimingResConstant_PMT3inchR12199_02 = 1.890 > # TTS(FWHM) = 1ns at 1 charge
-< TimingResMinimum_PMT3inchR12199_02 = 0.58 >
-< ScalFactorTTS_PMT3inchR12199_02 = 1 >
+< ScalFactorTTS_PMT3inchR14374_WCTE = 1 >
+< SPECDFFile_PMT3inchR14374_WCTE = $MDTROOT/parameter/SPE_CDF_PMT3inchR14374_WCTE.txt >
 
 # Digitizer setting
 < DigiHitIntegrationWindow = 200 >  // ns
@@ -43,7 +36,4 @@
 
 # Output setting
 < TimeOffset = 950. >
-< FlagMultDigits = 1 >
-
-
-< SPECDFFile_PMT3inchR12199_02 = $MDTROOT/parameter/SPE_CDF_PMT3inchR12199_02.txt >
+< FlagMultDigits = 0 >

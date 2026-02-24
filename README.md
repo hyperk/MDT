@@ -18,11 +18,7 @@ The library provides C++ classes that manage three tasks:
 Simple runtime procedures. First set up your ROOT and WCSIM:
 ```
 source your_thisroot.sh
-export WCSIMDIR=your_WCSIM_installation
-```
-If `libWCSimRoot.so` is not directly under `WCSIMDIR`, export to `WCSIMROOTDIR`.
-```
-export WCSIMROOTDIR=your_libWCSimRoot.so_installation
+source your_this_wcsim.sh # or just export WCSIM_BUILD_DIR
 ```
 Then set up the MDT environment.
 ```
@@ -32,7 +28,7 @@ cd $MDTROOT/app/utilities/WCRootData; make clean; make all
 cd $MDTROOT/app/application; make clean; make all
 cd $MDTROOT
 # edit variables properly in run_test_mdt4wcte.sh
-bash run_test_mdt4iwcd.sh
+bash run_test_mdt4wcte.sh
 ```
 
 ## IWCD usage

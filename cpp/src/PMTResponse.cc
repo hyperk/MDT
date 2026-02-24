@@ -229,3 +229,78 @@ float Response3inchR14374::HitTimeSmearing(float Q)
     float timingResolution = 0.6*fSclFacTTS;
     return fRand->Gaus(0., timingResolution);
 }
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+Response3inchR14374_WCTE::Response3inchR14374_WCTE(int seed, const string &pmtname)
+{
+    double charge[14] = 
+    {
+        0.2, 0.4, 0.6, 0.8, 1.0,
+        1.2, 1.4, 1.6, 1.8, 2.0,
+        2.5, 3.0, 3.5, 4.0
+    };
+    double resol[14] =
+    {
+        1.1654, 0.61088, 0.4186, 0.32532, 0.26484,
+        0.23084, 0.20969, 0.19297, 0.17716, 0.17046,
+        0.15455, 0.1427, 0.13699, 0.13229
+    };
+    gTResol = new TGraph(14,charge,resol);
+
+    this->Initialize(seed, pmtname);
+}
+
+Response3inchR14374_WCTE::Response3inchR14374_WCTE()
+{
+    double charge[14] = 
+    {
+        0.2, 0.4, 0.6, 0.8, 1.0,
+        1.2, 1.4, 1.6, 1.8, 2.0,
+        2.5, 3.0, 3.5, 4.0
+    };
+    double resol[14] =
+    {
+        1.1654, 0.61088, 0.4186, 0.32532, 0.26484,
+        0.23084, 0.20969, 0.19297, 0.17716, 0.17046,
+        0.15455, 0.1427, 0.13699, 0.13229
+    };
+    gTResol = new TGraph(14,charge,resol);
+}
+
+Response3inchR14374_WCTE::~Response3inchR14374_WCTE()
+{
+    delete gTResol;
+}
+
+void Response3inchR14374_WCTE::Initialize(int seed, const string &pmtname)
+{
+    fPMTType = pmtname;
+    fRand = new MTRandom(seed);
+
+    map<string, string> s;
+    s["ScalFactorTTS"] = "ScalFactorTTS";
+    s["SPECDFFile"] = "SPECDFFile";
+    if( fPMTType!="" )
+    {
+        map<string, string>::iterator i;
+        for(i=s.begin(); i!=s.end(); i++)
+        {
+            i->second += "_" + fPMTType;
+        }
+    }
+    Configuration *Conf = Configuration::GetInstance();
+    Conf->GetValue<float>(s["ScalFactorTTS"], fSclFacTTS);
+    Conf->GetValue<string>(s["SPECDFFile"], fTxtFileSPECDF);
+    this->LoadCDFOfSPE(fTxtFileSPECDF);
+}
+
+float Response3inchR14374_WCTE::HitTimeSmearing(float Q)
+{
+    float pmt_tts = 1.5;
+    if (Q>4.0) Q = 4.0; // limit Q to valid range
+    float val = gTResol->Eval(Q,0,"S");
+    float timingResolution = sqrt(pmt_tts*pmt_tts+val*val)/2.355; // conversion from FWHM to sigma
+    timingResolution *= fSclFacTTS;
+    return fRand->Gaus(0.0,timingResolution);
+}

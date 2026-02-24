@@ -15,6 +15,7 @@ class TrueHit
         float GetStartPosition(int i) const { return fStartPosition[i]; }
         float GetStartDirection(int i) const { return fStartDirection[i]; }
         int GetPosBin(int i) const { return fBin[i]; }
+        int GetCreatorProcess() const { return fCreatorProcess; }
 
         void SetPosition(int i, float f) { fPosition[i] = f; }
         void SetDirection(int i, float f) { fDirection[i] = f; }
@@ -22,6 +23,7 @@ class TrueHit
         void SetStartPosition(int i, float f) { fStartPosition[i] = f; }
         void SetStartDirection(int i, float f) { fStartDirection[i] = f; }
         void SetPosBin(int i, int b){ fBin[i] = b; }
+        void SetCreatorProcess(int i){ fCreatorProcess = i; }
 
     private:
         double fTime;
@@ -32,4 +34,5 @@ class TrueHit
         float fStartDirection[3]; // Photon track initial direction
         int fParentId;
         int fBin[3];
+        int fCreatorProcess;
 };

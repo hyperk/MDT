@@ -91,6 +91,7 @@ void WCRootData::AddTrueHitsToMDT(HitTubeCollection *hc, PMTResponse *pr, float 
 
             th->SetStartTime(aHitTime->GetPhotonStartTime()+intTime);
             for(int k=0; k<3; k++){ th->SetStartPosition(k, aHitTime->GetPhotonStartPos(k)); }
+            th->SetCreatorProcess((int)(aHitTime->GetPhotonCreatorProcess()));
             if( !pr->ApplyDE(th) ){ continue; }
 
             (&(*hc)[tubeID])->AddRawPE(th);
@@ -207,6 +208,7 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
     std::vector<TVector3> photonEndPos;
     std::vector<TVector3> photonStartDir;
     std::vector<TVector3> photonEndDir;
+    std::vector<ProcessType_t> photonCreatorProcess;
     for(hc->Begin(); !hc->IsEnd(); hc->Next())
     {
         // Get tube ID
@@ -227,6 +229,7 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
             photonEndPos.push_back(TVector3(PEs[iPE]->GetPosition(0),PEs[iPE]->GetPosition(1),PEs[iPE]->GetPosition(2)));
             photonStartDir.push_back(TVector3(PEs[iPE]->GetStartDirection(0),PEs[iPE]->GetStartDirection(1),PEs[iPE]->GetStartDirection(2)));
             photonEndDir.push_back(TVector3(PEs[iPE]->GetDirection(0),PEs[iPE]->GetDirection(1),PEs[iPE]->GetDirection(2)));
+            photonCreatorProcess.push_back((ProcessType_t)(PEs[iPE]->GetCreatorProcess()));
         }
 
         anEvent->AddCherenkovHit(tubeID,
@@ -238,7 +241,8 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
                                 photonStartPos,
                                 photonEndPos,
                                 photonStartDir,
-                                photonEndDir);
+                                photonEndDir,
+                                photonCreatorProcess);
 
         truetime.clear();
         primaryParentID.clear();
@@ -247,6 +251,7 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
         photonEndPos.clear();
         photonStartDir.clear();
         photonEndDir.clear();
+        photonCreatorProcess.clear();
     }
     const int nTriggers = ti->GetNumOfTrigger(); 
     for(int iTrig=0; iTrig<nTriggers; iTrig++) 
@@ -358,7 +363,7 @@ void WCRootData::AddTracks(const WCSimRootTrigger *aEvtIn, float offset_time, in
         Int_t     parenttype = aTrack->GetParenttype();
         Int_t     id = aTrack->GetId();
         Int_t     idPrnt = aTrack->GetParentId();
-
+        ProcessType_t creatorProcess = aTrack->GetCreatorProcess();
 
         Double_t   dir[3];
         Double_t   pdir[3];
@@ -393,6 +398,7 @@ void WCRootData::AddTracks(const WCSimRootTrigger *aEvtIn, float offset_time, in
 			  stop,
 			  start,
 			  parenttype,
+              creatorProcess,
 			  time,
 			  id,
 			  idPrnt,
