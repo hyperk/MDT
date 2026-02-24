@@ -2,6 +2,7 @@
 
 #include <string>
 #include <TGraph.h>
+#include <TFile.h>
 #include "MTRandom.h"
 #include "HitTube.h"
 
@@ -48,12 +49,16 @@ class GenericPMTResponse : public PMTResponse
         string fTxtFileSPECDF;
         void LoadPMTDE(const string &s);
         int fLoadDE;
-        std::vector<double> fDE;
+        std::vector<TGraph*> fDE;
         string fPMTDEFile;
         void LoadPMTTime(const string &s);
         int fLoadT;
         std::vector<double> fT;
         string fPMTTFile;
+        void LoadAngularResponse(const string &s);
+        int fLoadAR;
+        std::vector<double> fAR;
+        string fARFile;
 
     //private:
     protected:

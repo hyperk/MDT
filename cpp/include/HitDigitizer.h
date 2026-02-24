@@ -48,6 +48,8 @@ class HitDigitizer_mPMT : public HitDigitizer
     private:
         TH1F* hWF;
         float fAmplitudeSigma;
+        float fADCMax;
+        int fADCOverflow;
         float fDt;
         float fDv;
         float fWaveformOffset;
