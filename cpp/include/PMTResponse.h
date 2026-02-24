@@ -18,6 +18,7 @@ class PMTResponse
         virtual ~PMTResponse() {};
         virtual double GetRawSPE(const TrueHit* th=NULL, const HitTube* ht=NULL) = 0; 
         virtual float HitTimeSmearing(float) = 0;
+        virtual float HitTimeSmearing(float,int) = 0;
         virtual void Initialize(int, const string &s="") = 0;
         virtual bool ApplyDE(const TrueHit* th=NULL, const HitTube* ht=NULL) = 0;
 
@@ -38,12 +39,21 @@ class GenericPMTResponse : public PMTResponse
         void Initialize(int, const string &s="");
         virtual double GetRawSPE(const TrueHit* th=NULL, const HitTube* ht=NULL);
         virtual float HitTimeSmearing(float);
+        virtual float HitTimeSmearing(float,int);
         virtual bool ApplyDE(const TrueHit* th=NULL, const HitTube* ht=NULL);
 
     protected:
         void LoadCDFOfSPE(const string &s);
         float fqpe0[501];
         string fTxtFileSPECDF;
+        void LoadPMTDE(const string &s);
+        int fLoadDE;
+        std::vector<double> fDE;
+        string fPMTDEFile;
+        void LoadPMTTime(const string &s);
+        int fLoadT;
+        std::vector<double> fT;
+        string fPMTTFile;
 
     //private:
     protected:
