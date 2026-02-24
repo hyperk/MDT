@@ -85,7 +85,8 @@ $(function() {
 </ul>
 </li>
 </ul>
-<h1><a class="anchor" id="autotoc_md1"></a>
+<p>For details, check <a class="el" href="md_doc_MDT.html">doc/MDT.md</a>.</p>
+<h1><a class="anchor" id="autotoc_md17"></a>
 WCTE/WCSim usage</h1>
 <p>Simple runtime procedures. First set up your ROOT and WCSIM: </p><div class="fragment"><div class="line">source your_thisroot.sh</div>
 <div class="line">source your_this_wcsim.sh # or just export WCSIM_BUILD_DIR</div>
@@ -96,11 +97,11 @@ WCTE/WCSim usage</h1>
 <div class="line">cd $MDTROOT</div>
 <div class="line"># edit variables properly in run_test_mdt4wcte.sh</div>
 <div class="line">bash run_test_mdt4wcte.sh</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md2"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md18"></a>
 IWCD usage</h1>
 <p>Essentially the same usage but with OD support. </p><div class="fragment"><div class="line"># edit variables properly in run_test_mdt4iwcd.sh</div>
 <div class="line">bash run_test_mdt4iwcd.sh</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md19"></a>
 IWCD pile-up generation</h1>
 <p>Example usage </p><div class="fragment"><div class="line">$MDTROOT/app/application/appGenPileUpSpill $MDTROOT/example/genPileUpConfig.txt</div>
 </div><!-- fragment --><p> The application generates pile-up events by combining ID neutrino interaction events and beam background events in a spill.</p>
@@ -113,7 +114,7 @@ IWCD pile-up generation</h1>
 <li><code>UseOD</code>: Process OD hits</li>
 <li><code>NumOfSpillsSavedPerFile</code>, <code>TotalNumOfSpills</code>: output spill setup</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md4"></a>
+<h1><a class="anchor" id="autotoc_md20"></a>
 How to simulate and access digitized pulses</h1>
 <p>Turn on waveform simulation in the parameter file by <code>&lt; DigitizerType_PMTType = 1 &gt;</code>.</p>
 <p>For each true hit, a digitized waveform is simulated by sampling the single PE pulse (defined by the <code>&lt; WaveformFile &gt;</code> parameter) every 8 ns with 0.1 resolution. If there is another PE arriving within the hit integration window, the waveforms are added.</p>

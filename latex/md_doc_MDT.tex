@@ -1,0 +1,216 @@
+\hypertarget{md_doc_MDT_autotoc_md1}{}\doxysection{1. System Overview}\label{md_doc_MDT_autotoc_md1}
+{\bfseries{MDT}} is a C++ library designed to post-\/process simulation output from {\bfseries{WCSim}} (Water Cherenkov Simulator). Its primary function is to bridge the gap between \char`\"{}\+True Hits\char`\"{} (Monte Carlo photoelectrons) and \char`\"{}\+Digitized Hits\char`\"{} (ADC counts and timestamps representing electronic readout).
+
+The system is architected around three main phases\+:
+\begin{DoxyEnumerate}
+\item {\bfseries{Merging}}\+: Combining true hits from multiple sources (e.\+g., neutrino interactions + beam background) and adding intrinsic PMT noise (Dark Rate).
+\item {\bfseries{Digitizing}}\+: Simulating the PMT and electronics response to convert photoelectrons (PE) into digital time and charge.
+\item {\bfseries{Triggering}}\+: Applying detector trigger logic to select events of interest.
+\end{DoxyEnumerate}\hypertarget{md_doc_MDT_autotoc_md2}{}\doxysection{2. Core Library Architecture ($<$tt$>$cpp/$<$/tt$>$)}\label{md_doc_MDT_autotoc_md2}
+The core logic resides in {\ttfamily cpp/src} and {\ttfamily cpp/include}. The architecture relies heavily on polymorphism to handle different PMT types and digitization models.\hypertarget{md_doc_MDT_autotoc_md3}{}\doxysubsection{2.\+1. PMT Response Model ($<$tt$>$\+PMTResponse$<$/tt$>$)}\label{md_doc_MDT_autotoc_md3}
+The {\ttfamily \mbox{\hyperlink{classPMTResponse}{PMTResponse}}} class hierarchy defines how a specific PMT behaves physically (Quantum Efficiency, Transit Time Spread, Gain).
+
+
+\begin{DoxyItemize}
+\item {\bfseries{Base Class}}\+: {\ttfamily \mbox{\hyperlink{classPMTResponse}{PMTResponse}}} (Abstract)
+\begin{DoxyItemize}
+\item {\bfseries{Interface}}\+:
+\begin{DoxyItemize}
+\item {\ttfamily Get\+Raw\+SPE(...)}\+: Returns the charge of a Single Photoelectron (SPE), typically drawn from a distribution, for standard {\ttfamily \mbox{\hyperlink{classHitDigitizer}{Hit\+Digitizer}}}.
+\item {\ttfamily Hit\+Time\+Smearing(\+Q)}\+: Returns the time jitter (resolution) based on charge {\ttfamily Q}, for standard {\ttfamily \mbox{\hyperlink{classHitDigitizer}{Hit\+Digitizer}}}.
+\item {\ttfamily Apply\+DE(...)}\+: Determines if a photon is detected based on angular efficiency.
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item {\bfseries{Generic Implementation}}\+: {\ttfamily \mbox{\hyperlink{classGenericPMTResponse}{Generic\+PMTResponse}}}
+\begin{DoxyItemize}
+\item Handles loading standard configuration files\+:
+\begin{DoxyItemize}
+\item {\bfseries{SPE CDF}}\+: Cumulative Distribution Function for charge generation.
+\item {\bfseries{PMTDE}}\+: m\+PMT\+\_\+\+ID-\/dependent angular efficiency maps.
+\item {\bfseries{PMTTime}}\+: PMT-\/specific timing offsets.
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item {\bfseries{Specific Implementations}}\+:
+\begin{DoxyItemize}
+\item {\ttfamily \mbox{\hyperlink{classResponseBoxandLine20inchHQE}{Response\+Boxand\+Line20inch\+HQE}}}\+: Implements a specific time smearing model using {\ttfamily ksig\+\_\+param} and {\ttfamily klambda\+\_\+param}.
+\item {\ttfamily \mbox{\hyperlink{classResponse3inchR14374__WCTE}{Response3inch\+R14374\+\_\+\+WCTE}}}\+: Uses a {\ttfamily TGraph} ({\ttfamily g\+TResol}) to interpolate timing resolution as a function of charge.
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_doc_MDT_autotoc_md4}{}\doxysubsection{2.\+2. Digitization Logic ($<$tt$>$\+Hit\+Digitizer$<$/tt$>$)}\label{md_doc_MDT_autotoc_md4}
+The {\ttfamily \mbox{\hyperlink{classHitDigitizer}{Hit\+Digitizer}}} class is responsible for converting a collection of True Hits on a single PMT into Digitized Hits.
+
+
+\begin{DoxyItemize}
+\item {\bfseries{Base Class}}\+: {\ttfamily \mbox{\hyperlink{classHitDigitizer}{Hit\+Digitizer}}}
+\begin{DoxyItemize}
+\item $\ast$$\ast$\+Standard Algorithm ({\ttfamily Digitize\+Tube})$\ast$$\ast$\+:
+\begin{DoxyEnumerate}
+\item Sorts true hits by time.
+\item Iterates through hits using an {\bfseries{Integration Window}} ({\ttfamily f\+Integ\+Window}).
+\item Sums charge of all hits within the window.
+\item Applies {\ttfamily Hit\+Time\+Smearing} from the {\ttfamily \mbox{\hyperlink{classPMTResponse}{PMTResponse}}} object.
+\item Applies {\ttfamily Apply\+Threshold} to simulate DAQ efficiency/thresholds.
+\item Truncates values to simulate electronics precision ({\ttfamily f\+Precision\+Timing}, {\ttfamily f\+Precision\+Charge}).
+\end{DoxyEnumerate}
+\end{DoxyItemize}
+\item {\bfseries{Waveform Digitizer}}\+: {\ttfamily \mbox{\hyperlink{classHitDigitizer__mPMT}{Hit\+Digitizer\+\_\+m\+PMT}}}
+\begin{DoxyItemize}
+\item {\bfseries{Purpose}}\+: Simulates the full voltage waveform for multi-\/\+PMT (m\+PMT) setups or advanced analysis.
+\item {\bfseries{Workflow}}\+:
+\begin{DoxyEnumerate}
+\item $\ast$$\ast${\ttfamily Build\+Wavetrain}$\ast$$\ast$\+: Superimposes SPE pulse shapes (loaded from {\ttfamily Waveform\+File}) onto a histogram based on true hit times. The SPE amplitude is sampled from a Gaussian distribution of width {\ttfamily f\+Amplitude\+Sigma}.
+\item $\ast$$\ast${\ttfamily Fit\+Wavetrain}$\ast$$\ast$\+: Analyzes the generated waveform to extract hits.
+\begin{DoxyItemize}
+\item {\bfseries{Hit Finding}}\+: Looks for local maxima exceeding {\ttfamily f\+Amplitude\+Threshold}.
+\item {\bfseries{Time}}\+: Uses Linear Interpolation (CFD-\/like) to find the zero-\/crossing point.
+\item {\bfseries{Charge}}\+: Integrates samples around the peak ({\ttfamily f\+Charge\+Window\+Before}, {\ttfamily f\+Charge\+Window\+After}).
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_doc_MDT_autotoc_md5}{}\doxysubsection{2.\+3. Noise and Afterpulsing ($<$tt$>$\+PMTNoise$<$/tt$>$)}\label{md_doc_MDT_autotoc_md5}
+
+\begin{DoxyItemize}
+\item {\bfseries{Dark Noise}}\+:
+\begin{DoxyItemize}
+\item {\ttfamily Generate\+Dark\+Noise}\+: Calculates the number of noise hits using a Poisson distribution based on {\ttfamily f\+Dark\+Rate} and the time window.
+\item {\ttfamily Add\+Photo\+Electrons}\+: Injects these noise hits into the {\ttfamily \mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}}} as if they were true photons.
+\end{DoxyItemize}
+\item {\bfseries{Afterpulsing}}\+:
+\begin{DoxyItemize}
+\item {\ttfamily Add\+Afterpulse}\+: Iterates through {\itshape digitized} hits. If a hit triggers an afterpulse (probabilistic), a new hit is generated with a time delay and charge, then added to the digitizer.
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_doc_MDT_autotoc_md6}{}\doxysubsection{2.\+4. Triggering Logic}\label{md_doc_MDT_autotoc_md6}
+The library implements a trigger simulation via the {\ttfamily \mbox{\hyperlink{classTriggerAlgo}{Trigger\+Algo}}} class to determine if an event should be recorded, mimicking the Data Acquisition (DAQ) logic. Results are stored in {\ttfamily \mbox{\hyperlink{classTriggerInfo}{Trigger\+Info}}}.
+
+
+\begin{DoxyItemize}
+\item {\bfseries{Classes}}\+:
+\begin{DoxyItemize}
+\item {\ttfamily \mbox{\hyperlink{classTriggerAlgo}{Trigger\+Algo}}}\+: Handles the trigger logic. Configured via {\ttfamily MDTPar\+File}.
+\item {\ttfamily \mbox{\hyperlink{classTriggerInfo}{Trigger\+Info}}}\+: Container for trigger results (Trigger Time, Readout Window Start/\+End, Number of Hits, Trigger Type).
+\end{DoxyItemize}
+\item {\bfseries{Algorithms}}\+:
+\begin{DoxyItemize}
+\item {\bfseries{NDigits}} ({\ttfamily Trigger\+Type = NDigits})\+:
+\begin{DoxyEnumerate}
+\item Collects and sorts all digitized hit times from the {\ttfamily \mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}}}.
+\item Slides a time window of width {\ttfamily NDigits\+Window} with step {\ttfamily NDigits\+Step\+Size}.
+\item {\bfseries{Condition}}\+: Fires if hit count $>$ {\ttfamily NDigits\+Threshold}.
+\item {\bfseries{Readout}}\+: Saves hits within \mbox{[}{\ttfamily Trig\+Time} + {\ttfamily Pre\+Trigger\+Window}, {\ttfamily Trig\+Time} + {\ttfamily Post\+Trigger\+Window}\mbox{]}.
+\item {\bfseries{Overlap}}\+: Adjusts the start of the readout window if it overlaps with a previous trigger to avoid duplication.
+\item {\bfseries{Failure}}\+: If no trigger is found, a \char`\"{}\+Failure\char`\"{} trigger is recorded (typically with a specific failure time and window).
+\end{DoxyEnumerate}
+\item {\bfseries{No\+Trig}} ({\ttfamily Trigger\+Type = No\+Trig})\+:
+\begin{DoxyItemize}
+\item Forces a trigger at T=0. Useful for saving fixed windows or debugging.
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item {\bfseries{Usage in \mbox{\hyperlink{classMDTManager}{MDTManager}}}}\+:
+\begin{DoxyItemize}
+\item {\ttfamily Do\+Trigger(pmt\+Type)}\+: Invokes {\ttfamily Trigger\+Algo\+::\+Do\+Trigger}.
+\item {\ttfamily Get\+Trigger\+Info(pmt\+Type)}\+: Returns the populated {\ttfamily \mbox{\hyperlink{classTriggerInfo}{Trigger\+Info}}} object.
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_doc_MDT_autotoc_md7}{}\doxysection{3. Application Layer ($<$tt$>$app/$<$/tt$>$)}\label{md_doc_MDT_autotoc_md7}
+The {\ttfamily app/} directory contains executable applications that utilize the core library to process WCSim files.\hypertarget{md_doc_MDT_autotoc_md8}{}\doxysubsection{3.\+1. Common Workflow Patterns}\label{md_doc_MDT_autotoc_md8}
+Most applications follow this sequence\+:
+\begin{DoxyEnumerate}
+\item {\bfseries{\mbox{\hyperlink{classConfiguration}{Configuration}}}}\+: Read parameters (Singleton {\ttfamily \mbox{\hyperlink{classConfiguration}{Configuration}}} class).
+\item {\bfseries{Initialization}}\+: Instantiate {\ttfamily \mbox{\hyperlink{classMDTManager}{MDTManager}}} and register PMT types.
+\item {\bfseries{Event Loop}}\+:
+\begin{DoxyItemize}
+\item Read {\ttfamily wcsimrootevent} (True Hits).
+\item {\bfseries{Add\+True\+Hits}}\+: Pass hits to MDT.
+\item {\bfseries{Do\+Add\+Dark}}\+: Add noise.
+\item {\bfseries{Do\+Digitize}}\+: Convert to Digi\+Hits.
+\item {\bfseries{Do\+Trigger}}\+: Run trigger logic (e.\+g., {\ttfamily MDT-\/$>$Do\+Trigger(pmt\+Type)}).
+\item {\bfseries{Write}}\+: Retrieve trigger info ({\ttfamily MDT-\/$>$Get\+Trigger\+Info}) and save Digi\+Hits to output ROOT file.
+\end{DoxyItemize}
+\end{DoxyEnumerate}\hypertarget{md_doc_MDT_autotoc_md9}{}\doxysubsection{3.\+2. Key Applications}\label{md_doc_MDT_autotoc_md9}
+
+\begin{DoxyItemize}
+\item $\ast$$\ast${\ttfamily app\+Gen\+Pile\+Up\+Spill}$\ast$$\ast$\+:
+\begin{DoxyItemize}
+\item {\bfseries{Purpose}}\+: Generates \char`\"{}spills\char`\"{} containing multiple neutrino interactions and beam background events (e.\+g., for T2\+K/\+Hyper-\/K).
+\item {\bfseries{Logic}}\+:
+\begin{DoxyItemize}
+\item Uses {\ttfamily \mbox{\hyperlink{classWCRootDataIDNuInt}{WCRoot\+Data\+IDNu\+Int}}} and {\ttfamily \mbox{\hyperlink{classWCRootDataBeamBkg}{WCRoot\+Data\+Beam\+Bkg}}} to manage input files.
+\item Uses {\ttfamily \mbox{\hyperlink{classBeamTiming}{Beam\+Timing}}} to distribute events in time according to beam bunch structure.
+\item Merges hits from all interactions into a single {\ttfamily \mbox{\hyperlink{classMDTManager}{MDTManager}}} instance before digitizing.
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item $\ast$$\ast${\ttfamily app\+WCTESingle\+Event} / {\ttfamily app\+IWCDSingle\+Event}$\ast$$\ast$\+:
+\begin{DoxyItemize}
+\item {\bfseries{Purpose}}\+: Standard processing for single-\/event simulations (1 input event = 1 output event).
+\item {\bfseries{Difference}}\+: {\ttfamily WCTE} uses specific PMT model ({\ttfamily \mbox{\hyperlink{classResponse3inchR14374__WCTE}{Response3inch\+R14374\+\_\+\+WCTE}}}), while {\ttfamily IWCD} supports hybrid ID+\+OD configurations.
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_doc_MDT_autotoc_md10}{}\doxysection{4. Class Dependency \& Data Flow}\label{md_doc_MDT_autotoc_md10}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{graph TD}
+\DoxyCodeLine{    App["{}Application (e.g., appWCTESingleEvent)"{}] -\/-\/> Config[Configuration]}
+\DoxyCodeLine{    App -\/-\/ Read -\/-\/> Input[WCRootData Input]}
+\DoxyCodeLine{    App -\/-\/> MDT[MDTManager]}
+\DoxyCodeLine{    }
+\DoxyCodeLine{    MDT -\/-\/ Register -\/-\/> PMTType[PMTType]}
+\DoxyCodeLine{}
+\DoxyCodeLine{    PMTType -\/-\/> Tubes[HitTubeCollection]}
+\DoxyCodeLine{    PMTType -\/-\/> Noise[PMTNoise]}
+\DoxyCodeLine{    PMTType -\/-\/> PMTResponse}
+\DoxyCodeLine{    PMTType -\/-\/> Digi[HitDigitizer]}
+\DoxyCodeLine{    PMTType -\/-\/> Trig[TriggerAlgo]}
+\DoxyCodeLine{    }
+\DoxyCodeLine{    Input -\/-\/ Add TrueHits -\/-\/> Tubes}
+\DoxyCodeLine{    Input -\/-\/ Use -\/-\/> PMTResponse}
+\DoxyCodeLine{    }
+\DoxyCodeLine{    Noise -\/-\/ Add Dark Hits -\/-\/> Tubes}
+\DoxyCodeLine{    }
+\DoxyCodeLine{    Digi -\/-\/ Use -\/-\/> PMTResponse}
+\DoxyCodeLine{    Tubes -\/-\/ Digitize -\/-\/> Digi}
+\DoxyCodeLine{    }
+\DoxyCodeLine{    Tubes -\/-\/ Pass DigiHits -\/-\/> Trig}
+\DoxyCodeLine{    Trig -\/-\/ Generate -\/-\/> TrigInfo[TriggerInfo]}
+\DoxyCodeLine{    TrigInfo -\/-\/> Output[WCRootData Output]}
+\DoxyCodeLine{    Tubes -\/-\/ Write -\/-\/> Output}
+
+\end{DoxyCode}
+\hypertarget{md_doc_MDT_autotoc_md11}{}\doxysection{5. Developer Guide\+: How to Extend}\label{md_doc_MDT_autotoc_md11}
+\hypertarget{md_doc_MDT_autotoc_md12}{}\doxysubsection{5.\+1. Adding a New PMT Type}\label{md_doc_MDT_autotoc_md12}
+To add a new PMT model (e.\+g., a new 3-\/inch PMT)\+:
+\begin{DoxyEnumerate}
+\item {\bfseries{Create Header/\+Source}}\+: Create {\ttfamily PMTResponse\+New\+Type.\+h} and {\ttfamily .cc}.
+\item {\bfseries{Inherit}}\+: Inherit from {\ttfamily \mbox{\hyperlink{classGenericPMTResponse}{Generic\+PMTResponse}}}.
+\item {\bfseries{Implement}}\+:
+\begin{DoxyItemize}
+\item {\ttfamily Initialize()}\+: Load specific parameters.
+\item {\ttfamily Hit\+Time\+Smearing(float Q)}\+: Define the timing resolution function.
+\end{DoxyItemize}
+\item {\bfseries{Register}}\+: In your application (e.\+g., {\ttfamily app/application/\+My\+App.\+cc}), include the header and register it\+: \`{}\`{}\`{}cpp MDT-\/$>$Register\+PMTType(\char`\"{}\+PMTNew\+Type\char`\"{}, new PMTResponse\+New\+Type()); \`{}\`{}\`{}
+\end{DoxyEnumerate}\hypertarget{md_doc_MDT_autotoc_md13}{}\doxysubsection{5.\+2. Customizing Digitization}\label{md_doc_MDT_autotoc_md13}
+To change how waveforms are processed\+:
+\begin{DoxyEnumerate}
+\item {\bfseries{Modify {\ttfamily \mbox{\hyperlink{classHitDigitizer__mPMT}{Hit\+Digitizer\+\_\+m\+PMT}}}}}\+:
+\begin{DoxyItemize}
+\item Update {\ttfamily Build\+Wavetrain} if the pulse superposition logic changes.
+\item Update {\ttfamily Fit\+Wavetrain} to implement new hit-\/finding algorithms (e.\+g., changing from CFD to a fixed threshold or template fitting).
+\end{DoxyItemize}
+\item {\bfseries{\mbox{\hyperlink{classConfiguration}{Configuration}}}}\+: Ensure {\ttfamily Digitizer\+Type} is set correctly in the parameter file, and {\ttfamily Waveform\+File} points to the correct SPE pulse shape.
+\end{DoxyEnumerate}\hypertarget{md_doc_MDT_autotoc_md14}{}\doxysubsection{5.\+3. Adding New Trigger Logic}\label{md_doc_MDT_autotoc_md14}
+
+\begin{DoxyEnumerate}
+\item Implement logic in {\ttfamily \mbox{\hyperlink{classTriggerAlgo}{Trigger\+Algo}}} that scans {\ttfamily \mbox{\hyperlink{classHitTubeCollection}{Hit\+Tube\+Collection}}} for {\ttfamily Digi\+Hits} meeting coincidence criteria (e.\+g., NDigits).
+\item Ensure {\ttfamily \mbox{\hyperlink{classTriggerInfo}{Trigger\+Info}}} is populated with the correct trigger time and readout window.
+\end{DoxyEnumerate}\hypertarget{md_doc_MDT_autotoc_md15}{}\doxysection{6. Configuration Parameters}\label{md_doc_MDT_autotoc_md15}
+The system is driven by text-\/based parameter files. Key parameters include\+:
+\begin{DoxyItemize}
+\item $\ast$$\ast${\ttfamily Digitizer\+Type}$\ast$$\ast$\+: Selects between standard (WCSim) or waveform digitizer.
+\begin{DoxyItemize}
+\item {\ttfamily Waveform\+File}\+: Path to the text file containing the waveform pulse shape (Time vs Voltage).
+\end{DoxyItemize}
+\item $\ast$$\ast${\ttfamily Dark\+Rate}$\ast$$\ast$\+: PMT dark noise rate in k\+Hz.
+\item $\ast$$\ast${\ttfamily PMTDE}$\ast$$\ast$\+: Path to PMT angular efficiency file.
+\item {\bfseries{Trigger Parameters}}\+:
+\begin{DoxyItemize}
+\item {\ttfamily Trigger\+Type}\+: {\ttfamily NDigits} or {\ttfamily No\+Trig}.
+\item {\ttfamily NDigits\+Window}\+: Width of the sliding window (ns).
+\item {\ttfamily NDigits\+Threshold}\+: Minimum number of hits to fire a trigger. 
+\end{DoxyItemize}
+\end{DoxyItemize}

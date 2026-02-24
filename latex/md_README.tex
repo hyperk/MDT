@@ -20,7 +20,9 @@ The library provides C++ classes that manage three tasks\+:
 \item A simple algorithm that counts number of digitized hits falling in a sliding time winodw
 \item Selectable trigger window and thershold
 \end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{md_README_autotoc_md1}{}\doxysection{WCTE/\+WCSim usage}\label{md_README_autotoc_md1}
+\end{DoxyItemize}
+
+For details, check \mbox{\hyperlink{md_doc_MDT}{doc/\+MDT.md}}.\hypertarget{md_README_autotoc_md17}{}\doxysection{WCTE/\+WCSim usage}\label{md_README_autotoc_md17}
 Simple runtime procedures. First set up your ROOT and WCSIM\+: 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{source your\_thisroot.sh}
@@ -38,14 +40,14 @@ Simple runtime procedures. First set up your ROOT and WCSIM\+:
 \DoxyCodeLine{bash run\_test\_mdt4wcte.sh}
 
 \end{DoxyCode}
-\hypertarget{md_README_autotoc_md2}{}\doxysection{IWCD usage}\label{md_README_autotoc_md2}
+\hypertarget{md_README_autotoc_md18}{}\doxysection{IWCD usage}\label{md_README_autotoc_md18}
 Essentially the same usage but with OD support. 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\# edit variables properly in run\_test\_mdt4iwcd.sh}
 \DoxyCodeLine{bash run\_test\_mdt4iwcd.sh}
 
 \end{DoxyCode}
-\hypertarget{md_README_autotoc_md3}{}\doxysection{IWCD pile-\/up generation}\label{md_README_autotoc_md3}
+\hypertarget{md_README_autotoc_md19}{}\doxysection{IWCD pile-\/up generation}\label{md_README_autotoc_md19}
 Example usage 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\$MDTROOT/app/application/appGenPileUpSpill \$MDTROOT/example/genPileUpConfig.txt}
@@ -62,7 +64,7 @@ Input variables are\+:
 \item {\ttfamily IDNu\+Int\+Rate},{\ttfamily Beam\+Bkg\+Rate}\+: Mean number of ID and background events per spill. In each spill, the actual number of interactions are drawn from a Poisson distribution, and interaction timing according to the bunch structure (see {\ttfamily \mbox{\hyperlink{classBeamTiming}{Beam\+Timing}}} class under {\ttfamily app/utilities/\+WCRoot\+Data/})
 \item {\ttfamily Use\+OD}\+: Process OD hits
 \item {\ttfamily Num\+Of\+Spills\+Saved\+Per\+File}, {\ttfamily Total\+Num\+Of\+Spills}\+: output spill setup
-\end{DoxyItemize}\hypertarget{md_README_autotoc_md4}{}\doxysection{How to simulate and access digitized pulses}\label{md_README_autotoc_md4}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md20}{}\doxysection{How to simulate and access digitized pulses}\label{md_README_autotoc_md20}
 Turn on waveform simulation in the parameter file by {\ttfamily $<$ Digitizer\+Type\+\_\+\+PMTType = 1 $>$}.
 
 For each true hit, a digitized waveform is simulated by sampling the single PE pulse (defined by the {\ttfamily $<$ Waveform\+File $>$} parameter) every 8 ns with 0.\+1 resolution. If there is another PE arriving within the hit integration window, the waveforms are added.
