@@ -49,7 +49,7 @@
 < WaveformFile = $MDTROOT/parameter/pmt_sig_ref_phot_fft_iterp_1.txt > # 1PE pulse waveform (amplitude = 2048)
 < AmplitudeSigma = 0.37 > # 1PE amplitude sigma in fraction
 < ADCMax = 61440 > # ADC dynamic range ~ 30PE
-< ADCOverflow = 1 > # Overflow causes ADC values to flip to negative
+< ADCOverflow = 0 > # Overflow causes ADC values to flip to negative
 < WaveformOffset = 0 > # ns
 < SamplingInterval = 8 > # ns
 < SamplingResolution = 0.1 >
