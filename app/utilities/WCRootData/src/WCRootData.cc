@@ -102,9 +102,11 @@ void WCRootData::AddTrueHitsToMDT(HitTubeCollection *hc, PMTResponse *pr, float 
             for(int k=0; k<3; k++){ th->SetPosition(k, aHitTime->GetPhotonEndPos(k)); }
             for(int k=0; k<3; k++){ th->SetDirection(k, aHitTime->GetPhotonEndDir(k)); }
             for(int k=0; k<3; k++){ th->SetStartDirection(k, aHitTime->GetPhotonStartDir(k)); }
-
+            
             th->SetStartTime(aHitTime->GetPhotonStartTime()+intTime);
             for(int k=0; k<3; k++){ th->SetStartPosition(k, aHitTime->GetPhotonStartPos(k)); }
+            th->SetStartEnergy(aHitTime->GetPhotonStartEnergy());
+            th->SetEnergy(aHitTime->GetPhotonEndEnergy());
             th->SetCreatorProcess((int)(aHitTime->GetPhotonCreatorProcess()));
             if( !pr->ApplyDE(th,&(*hc)[tubeID]) ){ continue; }
 
@@ -234,11 +236,15 @@ void WCRootData::AddDigiHits(MDTManager *mdt, int eventID, int iPMT)
 void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID, int iPMT)
 {
     WCSimRootTrigger* anEvent = fSpEvt[iPMT]->GetTrigger(0);
+    //first trigger has SubEvtNumber=1
+    anEvent->SetHeader(eventID, 0, 0, 1);
     // Save raw hits
     // container for photon info
     std::vector<double> truetime;
     std::vector<int>   primaryParentID;
     std::vector<float> photonStartTime;
+    std::vector<float> photonStartEnergy;
+    std::vector<float> photonEndEnergy;
     std::vector<TVector3> photonStartPos;
     std::vector<TVector3> photonEndPos;
     std::vector<TVector3> photonStartDir;
@@ -260,6 +266,8 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
             truetime.push_back(PEs[iPE]->GetTime());
             primaryParentID.push_back(PEs[iPE]->GetParentId());
             photonStartTime.push_back(PEs[iPE]->GetStartTime());
+            photonStartEnergy.push_back(PEs[iPE]->GetStartEnergy());
+            photonEndEnergy.push_back(PEs[iPE]->GetEnergy());
             photonStartPos.push_back(TVector3(PEs[iPE]->GetStartPosition(0),PEs[iPE]->GetStartPosition(1),PEs[iPE]->GetStartPosition(2)));
             photonEndPos.push_back(TVector3(PEs[iPE]->GetPosition(0),PEs[iPE]->GetPosition(1),PEs[iPE]->GetPosition(2)));
             photonStartDir.push_back(TVector3(PEs[iPE]->GetStartDirection(0),PEs[iPE]->GetStartDirection(1),PEs[iPE]->GetStartDirection(2)));
@@ -273,6 +281,8 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
                                 truetime,
                                 primaryParentID,
                                 photonStartTime,
+                                photonStartEnergy,
+                                photonEndEnergy,
                                 photonStartPos,
                                 photonEndPos,
                                 photonStartDir,
@@ -282,6 +292,8 @@ void WCRootData::AddDigiHits(HitTubeCollection *hc, TriggerInfo *ti, int eventID
         truetime.clear();
         primaryParentID.clear();
         photonStartTime.clear();
+        photonStartEnergy.clear();
+        photonEndEnergy.clear();
         photonStartPos.clear();
         photonEndPos.clear();
         photonStartDir.clear();
@@ -429,6 +441,28 @@ void WCRootData::FillTree()
 void WCRootData::AddTracks(const WCSimRootTrigger *aEvtIn, float offset_time, int iPMT)
 {
     WCSimRootTrigger *aEvtOut = fSpEvt[iPMT]->GetTrigger(0);
+        
+    // Copy truth info (Npar, Nvtxs, Jmu, Jp, Vtxs, Modes, Vtxsvol)
+    int nv = aEvtIn->GetNvtxs();
+    if (nv < 0) nv = 0;
+    if (nv > 900) nv = 900;
+    if (aEvtIn->GetNvtxs() < 0 || aEvtIn->GetNvtxs() > MAX_N_VERTICES) {
+        std::cerr << "WARN Nvtxs=" << aEvtIn->GetNvtxs() << "\n";
+    }
+    aEvtOut->SetNpar(aEvtIn->GetNpar());
+    aEvtOut->SetNvtxs(nv);
+    aEvtOut->SetVecRecNumber(aEvtIn->GetVecRecNumber());
+    aEvtOut->SetJmu(aEvtIn->GetJmu());
+    aEvtOut->SetJp(aEvtIn->GetJp());
+
+    for (int iv = 0; iv < nv; ++iv) {
+        aEvtOut->SetMode(iv, aEvtIn->GetMode(iv));
+        aEvtOut->SetVtxsvol(iv, aEvtIn->GetVtxsvol(iv));
+        for (int i = 0; i < 4; ++i) {
+            aEvtOut->SetVtxs(iv, i, aEvtIn->GetVtxs(iv, i));
+        }
+    }
+
     TClonesArray *tracks = aEvtIn->GetTracks();
     const int ntrack = tracks->GetEntries();
     for(int i=0; i<ntrack; i++)

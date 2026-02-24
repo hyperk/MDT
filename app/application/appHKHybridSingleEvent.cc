@@ -38,6 +38,7 @@ int main(int argc, char **argv)
     MDT->RegisterPMTType(fPMTType[1], new Response3inchR14374());
 
     const vector<string> listWCRootEvt{"wcsimrootevent", "wcsimrootevent2"};
+    const vector<string> listWCRootCopyTree{"wcsimGeoT","Settings","wcsimRootOptionsT"};
 
     WCRootData *inData = new WCRootData();
     WCRootData *outData = new WCRootData();
@@ -59,11 +60,14 @@ int main(int argc, char **argv)
             inData->AddTrueHitsToMDT(MDT->GetHitTubeCollection(fPMTType[j]), MDT->GetPMTResponse(fPMTType[j]), toffset, j);
             MDT->DoAddDark(fPMTType[j]);
             MDT->DoDigitize(fPMTType[j]);
-            MDT->DoTrigger(fPMTType[j]);
-
-            TriggerInfo *ti = MDT->GetTriggerInfo(fPMTType[j]);
-            outData->AddDigiHits(MDT->GetHitTubeCollection(fPMTType[j]), ti, iEntry, j);
         }
+        
+        // !!!!!!!!!!! Trigger is done only for the 20'' PMT, and the digi hits of both PMT types are added based on that !!!!!!!!!!!
+        MDT->DoTrigger(fPMTType[0]);
+        TriggerInfo* ti20 = MDT->GetTriggerInfo(fPMTType[0]);
+        outData->AddDigiHits(MDT->GetHitTubeCollection(fPMTType[0]), ti20, iEntry, 0);
+        outData->AddDigiHits(MDT->GetHitTubeCollection(fPMTType[1]), ti20, iEntry, 1);
+
         outData->FillTree();
 
         MDT->DoInitialize();
@@ -97,3 +101,4 @@ bool ParseCmdArguments(int argc, char **argv)
 	}
 	return true;
 }
+
